@@ -9,6 +9,9 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import registerAction from "../actions/registerAction";
+import loginAction from '../actions/loginAction'
+
+import Typography from "./UI/Typography";
 
 const useStyles = (theme) => ({
   paper: {
@@ -104,20 +107,15 @@ class SignUp extends Component {
   submitHandler = (event) => {
     event.preventDefault();
     const isValid = this.checkValidity();
-    console.log(isValid);
-    // console.log(`Submit Email ${this.state.controls.email.valid}`);
-    // console.log(`Submit Password ${this.state.controls.password.valid}`);
-
-    // this.props.onAuth(
-    //   this.state.controls.email.value,
-    //   this.state.controls.password.value,
-    //   this.state.isSignup
-    // );
+    // console.log(this.state.isSignup)
+    if(isValid && !this.state.isSignup){
+        this.props.loginAction(this.state.email, this.state.password)
+    }
   };
 
   /* Enable typing in text boxes */
   handleChange = (event) => {
-    this.checkValidity()
+    this.checkValidity();
     this.setState({
       [event.target.name]: event.target.value,
     });
@@ -140,26 +138,6 @@ class SignUp extends Component {
       });
     }
 
-    let form = formElementsArray.map((formElement) => (
-      <Grid item xs={12}>
-        <TextField
-          id={formElement.id}
-          label={formElement.id}
-          name={formElement.id}
-          variant='outlined'
-          //value={formElement.config.value}
-          validators={formElement.config.validation}
-          errorMessages={formElement.config.errorMessages}
-          //   elementType={formElement.config.elementType}
-          //   elementConfig={formElement.config.elementConfig}
-          //   value={formElement.config.value}
-          //   invalid={!formElement.config.valid}
-          //   shouldValidate={formElement.config.validation}
-          //   touched={formElement.config.touched}
-          onChange={(event) => this.inputChangedHandler(event, formElement.id)}
-        />
-      </Grid>
-    ));
     const { classes } = this.props;
 
     let errorMessage = null;
@@ -170,7 +148,11 @@ class SignUp extends Component {
     return (
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
+
         <div className={classes.paper}>
+          <Typography variant='h2' marked='center' align='center'>
+            Would You Rather
+          </Typography>
           <form
             className={classes.form}
             onSubmit={this.submitHandler}
@@ -227,6 +209,9 @@ class SignUp extends Component {
               Sign Up
             </Button>
           </form>
+          <Button onClick={this.switchAuthModeHandler}>
+            SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
+          </Button>
         </div>
       </Container>
     );
@@ -251,6 +236,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   registerAction: (email, password) =>
     dispatch(registerAction(email, password)),
+
+    loginAction: (email, password) =>
+    dispatch(loginAction(email, password)),
 });
 
 export default connect(
