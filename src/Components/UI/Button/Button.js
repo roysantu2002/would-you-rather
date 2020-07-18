@@ -2,9 +2,13 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 
 const useStyles = (theme) => ({
- button: {
-    color: theme.palette.primary,
-  },
+
+Success: {
+    color: "#5C9210"
+},
+Danger : {
+    color: "#944317"
+}
 });
 
 const button = (props) => {
@@ -12,9 +16,8 @@ const button = (props) => {
 
   return (
     <Button
-      color='primary'
       disabled={props.disabled}
-      className={[classes.button, classes[props.btnType]].join(" ")}
+      className={[classes.Button, classes[props.btnType]].join(' ')}
       onClick={props.clicked}
     >
       {props.children}

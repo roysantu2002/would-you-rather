@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
-// import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
@@ -9,9 +9,6 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import registerAction from "../actions/registerAction";
-
-import Input from "../Components/UI/Input/Input";
-import Button from "../Components/UI/Button/Button";
 
 const useStyles = (theme) => ({
   paper: {
@@ -40,78 +37,55 @@ const useStyles = (theme) => ({
 const initialState = {
   email: "",
   password: "",
-  image: null,
-  imageURL: "url('/public/assets/avatar.jpg')",
+  emailError: "",
+  passwordError: "",
 };
 
 class SignUp extends Component {
   state = {
-    controls: {
-      email: {
-        elementType: "TextField",
-        elementConfig: {
-          type: "email",
-          placeholder: "Mail Address",
-        },
-        value: "",
-        validation: {
-          required: true,
-          isEmail: true,
-        },
-        valid: false,
-        touched: false,
-      },
-      password: {
-        elementType: "TextField",
-        elementConfig: {
-          type: "password",
-          placeholder: "Password",
-        },
-        value: "",
-        validation: {
-          required: true,
-          minLength: 6,
-        },
-        valid: false,
-        touched: false,
-      },
-    },
+    data: [],
+    initialState,
     isSignup: true,
   };
 
-  checkValidity(value, rules) {
+  checkValidity = () => {
     let isValid = true;
-    if (!rules) {
-      return true;
+    let emailError = "";
+    let passwordError = "";
+
+    const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+    if (!this.state.email) {
+      emailError = "Email cannot be empty";
     }
 
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
+    if (this.state.email) {
+      isValid = pattern.test(this.state.email);
+      if (!isValid) {
+        emailError = "Please enter valid email address";
+      }
+    }
+    if (!this.state.password) {
+      passwordError = "Password cannot be empty";
+    } else if (this.state.password) {
+      if (this.state.password.length < 6) {
+        passwordError = "Password not strong";
+      }
     }
 
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
+    if (emailError || passwordError) {
+      this.setState({ emailError, passwordError });
+      return false;
+    } else {
+      this.setState({ emailError: "", passwordError: "" });
     }
 
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-
-    if (rules.isEmail) {
-      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test(value) && isValid;
-    }
-
-    if (rules.isNumeric) {
-      const pattern = /^\d+$/;
-      isValid = pattern.test(value) && isValid;
-    }
-
-    return isValid;
-  }
+    return true;
+  };
 
   inputChangedHandler = (event, controlName) => {
-      console.log(controlName)
+    console.log(controlName);
+
     const updatedControls = {
       ...this.state.controls,
       [controlName]: {
@@ -129,12 +103,24 @@ class SignUp extends Component {
 
   submitHandler = (event) => {
     event.preventDefault();
-    console.log(`Submit ${this.state.controls.email.value}`)
+    const isValid = this.checkValidity();
+    console.log(isValid);
+    // console.log(`Submit Email ${this.state.controls.email.valid}`);
+    // console.log(`Submit Password ${this.state.controls.password.valid}`);
+
     // this.props.onAuth(
     //   this.state.controls.email.value,
     //   this.state.controls.password.value,
     //   this.state.isSignup
     // );
+  };
+
+  /* Enable typing in text boxes */
+  handleChange = (event) => {
+    this.checkValidity()
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
   switchAuthModeHandler = () => {
@@ -156,48 +142,117 @@ class SignUp extends Component {
 
     let form = formElementsArray.map((formElement) => (
       <Grid item xs={12}>
-        <Input
-          key={formElement.id}
-          elementType={formElement.config.elementType}
-          elementConfig={formElement.config.elementConfig}
-          value={formElement.config.value}
-          invalid={!formElement.config.valid}
-          shouldValidate={formElement.config.validation}
-          touched={formElement.config.touched}
-          changed={(event) => this.inputChangedHandler(event, formElement.id)}
+        <TextField
+          id={formElement.id}
+          label={formElement.id}
+          name={formElement.id}
+          variant='outlined'
+          //value={formElement.config.value}
+          validators={formElement.config.validation}
+          errorMessages={formElement.config.errorMessages}
+          //   elementType={formElement.config.elementType}
+          //   elementConfig={formElement.config.elementConfig}
+          //   value={formElement.config.value}
+          //   invalid={!formElement.config.valid}
+          //   shouldValidate={formElement.config.validation}
+          //   touched={formElement.config.touched}
+          onChange={(event) => this.inputChangedHandler(event, formElement.id)}
         />
       </Grid>
     ));
     const { classes } = this.props;
 
+    let errorMessage = null;
+
+    if (this.props.error) {
+      errorMessage = <p>{this.props.error.message}</p>;
+    }
     return (
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <div className={classes.paper}>
-          <form  className={classes.form} onSubmit={this.submitHandler}>
-            {form}
-            <Grid item xs={12}>
-              <Button btnType='Success'>SUBMIT </Button>
+          <form
+            className={classes.form}
+            onSubmit={this.submitHandler}
+            noValidate
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}></Grid>
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                id='email'
+                label='Email'
+                value={this.state.email}
+                name='email'
+                autoComplete='email'
+                onChange={this.handleChange}
+              />
+              <div style={{ fontSize: 12, color: "red" }}>
+                {this.state.emailError}
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                name='password'
+                label='Password'
+                value={this.state.password}
+                type='password'
+                id='password'
+                autoComplete='current-password'
+                onChange={this.handleChange}
+              />
+              <div style={{ fontSize: 12, color: "red" }}>
+                {this.state.passwordError}
+              </div>
+            </Grid>
+            <Button
+              id='sign-up-button'
+              fullWidth
+              variant='contained'
+              color='primary'
+              className={classes.submit}
+              //   onClick={() =>
+              //     this.props.loginAction(this.state.email, this.state.password)
+              //   }
+
+              onClick={this.submitHandler}
+            >
+              Sign Up
+            </Button>
           </form>
-          <Grid item xs={12} >
-          <Button clicked={this.switchAuthModeHandler} btnType='Danger'>
-            SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-          </Button>
-          </Grid>
         </div>
       </Container>
     );
   }
 }
 
+// const mapStateToProps = state => {
+//     return {
+//         ...state,
+//         // loading: state.auth.loading,
+//         // error: state.auth.error,
+//         // isAuthenticated: state.auth.token !== null,
+//         // buildingBurger: state.burgerBuilder.building,
+//         // authRedirectPath: state.auth.authRedirectPath
+//     };
+// };
+
 const mapStateToProps = (state) => ({
   ...state,
 });
+
 const mapDispatchToProps = (dispatch) => ({
-  registerAction: (name, email, password) =>
-    dispatch(registerAction(name, email, password)),
+  registerAction: (email, password) =>
+    dispatch(registerAction(email, password)),
 });
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps

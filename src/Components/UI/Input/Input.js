@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
-import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
 
 const useStyles = makeStyles((theme) => ({
   InputElement: {
@@ -20,9 +20,9 @@ const input = (props) => {
 
   //console.log(props.changed)
   switch (props.elementType) {
-    case "TextField":
+    case "Input":
       inputElement = (
-        <TextField
+        <Input
           variant='outlined'
           className={inputClasses.join(" ")}
           {...props.elementConfig}
@@ -34,10 +34,10 @@ const input = (props) => {
     case "textarea":
       inputElement = (
         <textarea
-          className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
+        //   className={inputClasses.join(" ")}
+        //   {...props.elementConfig}
+        //   value={props.value}
+        //   onChange={props.changed}
         />
       );
       break;
