@@ -9,7 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import registerAction from "../actions/registerAction";
-import loginAction from "../actions/loginAction";
+import loginAction from '../actions/loginAction'
 import data from "../data/users";
 import Typography from "./UI/Typography";
 
@@ -37,85 +37,86 @@ const useStyles = (theme) => ({
   },
 });
 
+const initialState = {
+  id: ""
+};
+
 class SignUp extends Component {
   state = {
     users: [],
-    id: "",
+    initialState,
     isSignup: true,
   };
 
   componentDidMount() {
-    const usersData = [];
+    const usersData = []
+      data.map((postData) => {
+        usersData.push(postData);
+      });
+      this.setState(() => ({
+        users: usersData,
+      }));
 
-    data.map((key, i) => {
-        console.log(i)
-        console.log(Object.values(key))
-    })
-
-          
-    // var keyArray = Object.keys(obj); // key1
-    // console.log(obj[keyArray[0]]); // value
-
-    // console.log(keyArray);
-    data.map((postData) => {
-      usersData.push(postData);
-    });
-    this.setState(() => ({
-      users: usersData,
-    }));
   }
 
   checkValidity = () => {
     let isValid = true;
     let idError = "";
 
-    if (!this.state.id) {
-      idError = "id cannot be empty";
-    } else if (this.state.id) {
-      if (this.state.id.length < 6) {
-        idError = "id min of 6 characters";
+    const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+    if (!this.state.email) {
+      emailError = "Email cannot be empty";
+    }
+
+    if (this.state.email) {
+      isValid = pattern.test(this.state.email);
+      if (!isValid) {
+        emailError = "Please enter valid email address";
       }
     }
-    if (idError) {
-      this.setState({ idError });
+    if (!this.state.password) {
+      passwordError = "Password cannot be empty";
+    } else if (this.state.password) {
+      if (this.state.password.length < 6) {
+        passwordError = "Password not strong";
+      }
+    }
+
+    if (emailError || passwordError) {
+      this.setState({ emailError, passwordError });
       return false;
     } else {
-      this.setState({ idError: "" });
+      this.setState({ emailError: "", passwordError: "" });
     }
 
     return true;
   };
 
+  inputChangedHandler = (event, controlName) => {
+    console.log(controlName);
+
+    const updatedControls = {
+      ...this.state.controls,
+      [controlName]: {
+        ...this.state.controls[controlName],
+        value: event.target.value,
+        valid: this.checkValidity(
+          event.target.value,
+          this.state.controls[controlName].validation
+        ),
+        touched: true,
+      },
+    };
+    this.setState({ controls: updatedControls });
+  };
+
   submitHandler = (event) => {
     event.preventDefault();
     const isValid = this.checkValidity();
-    //console.log(isValid)
-
-    this.state.users.forEach(function (element) {
-      console.log(element.values());
-    }); /* outputs:onetwothreefour*/
-
-    //console.log(this.state.users[0].id)
-
-    if (isValid && !this.state.isSignup) {
-      //console.log(this.state.id)
-      // this.state.users.map((b) => {
-      //    console.log(b[0])
-      // })
-      // this.state.users.map(user => {
-      //     //const newValue = user.includes("tylermcginnis")
-      //     // if(user === this.state.id){
-      //         console.log(user.values())
-      //     // }
-      // });
-      // {this.state.users.filter(user => user.id).map(filteredPerson => (
-      //       console.log('filteredPerson.name')
-      //   ))}
-      //const newValue = this.state.users.includes("tylermcginnis");
-      //const newValue = this.state.users.filter( (number)=> number === this.state.id);
-      //const found = this.state.users.find(element =>  console.log(element));
-      //console.log(newValue)
-      //this.props.loginAction(this.state.email, this.state.password)
+    // console.log(this.state.isSignup)
+    if(isValid && !this.state.isSignup){
+        this.props.loginAction(this.state.email, this.state.password)
     }
   };
 
@@ -172,15 +173,32 @@ class SignUp extends Component {
                 variant='outlined'
                 required
                 fullWidth
-                id='id'
-                label='user id'
+                id='email'
+                label='Email'
                 value={this.state.email}
-                name='id'
-                autoComplete='id'
+                name='email'
+                autoComplete='email'
                 onChange={this.handleChange}
               />
               <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.idError}
+                {this.state.emailError}
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                name='password'
+                label='Password'
+                value={this.state.password}
+                type='password'
+                id='password'
+                autoComplete='current-password'
+                onChange={this.handleChange}
+              />
+              <div style={{ fontSize: 12, color: "red" }}>
+                {this.state.passwordError}
               </div>
             </Grid>
             <Button
@@ -226,7 +244,8 @@ const mapDispatchToProps = (dispatch) => ({
   registerAction: (email, password) =>
     dispatch(registerAction(email, password)),
 
-  loginAction: (email, password) => dispatch(loginAction(email, password)),
+    loginAction: (email, password) =>
+    dispatch(loginAction(email, password)),
 });
 
 export default connect(
