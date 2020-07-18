@@ -46,13 +46,6 @@ class SignUp extends Component {
 
   componentDidMount() {
     const usersData = [];
-
-    data.map((key, i) => {
-        console.log(i)
-        console.log(Object.values(key))
-    })
-
-          
     // var keyArray = Object.keys(obj); // key1
     // console.log(obj[keyArray[0]]); // value
 
@@ -91,13 +84,19 @@ class SignUp extends Component {
     const isValid = this.checkValidity();
     //console.log(isValid)
 
-    this.state.users.forEach(function (element) {
-      console.log(element.values());
-    }); /* outputs:onetwothreefour*/
+    // this.state.users.forEach(function (element) {
+    //   console.log(element.values());
+    // }); /* outputs:onetwothreefour*/
 
     //console.log(this.state.users[0].id)
 
     if (isValid && !this.state.isSignup) {
+      this.state.users.map((key) => {
+        const users = Object.keys(key)
+        const newValue = users.includes("tylermcginnis")
+        console.log(newValue)
+      });
+
       //console.log(this.state.id)
       // this.state.users.map((b) => {
       //    console.log(b[0])
