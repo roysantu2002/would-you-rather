@@ -1,5 +1,5 @@
 
-const registerAction = (name, email, password) => async dispatch => {
+const registerAction = (id) => async dispatch => {
   
 };
 export default registerAction;

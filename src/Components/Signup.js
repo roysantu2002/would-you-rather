@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,10 @@ import registerAction from "../actions/registerAction";
 import loginAction from "../actions/loginAction";
 import data from "../data/users";
 import Typography from "./UI/Typography";
+import Dashboard from "./Dashboard"
+import store from '../store'
+import * as DataApi from '../utils/_DATA'
+
 
 const useStyles = (theme) => ({
   paper: {
@@ -45,17 +49,24 @@ class SignUp extends Component {
   };
 
   componentDidMount() {
-    const usersData = [];
-    // var keyArray = Object.keys(obj); // key1
-    // console.log(obj[keyArray[0]]); // value
+    // DataApi._getUsers()
+    // .then((res) => {
+    //   this.setState(() => ({
+    //     users: res,
+    //   }));
+    //   // console.log(res)
+    // })
+    // const usersData = [];
+    // // var keyArray = Object.keys(obj); // key1
+    // // console.log(obj[keyArray[0]]); // value
 
     // console.log(keyArray);
-    data.map((postData) => {
-      usersData.push(postData);
-    });
-    this.setState(() => ({
-      users: usersData,
-    }));
+    // data.map((postData) => {
+    //   usersData.push(postData);
+    // });
+    // this.setState(() => ({
+    //   users: usersData,
+    // }));
   }
 
   checkValidity = () => {
@@ -91,11 +102,13 @@ class SignUp extends Component {
     //console.log(this.state.users[0].id)
 
     if (isValid && !this.state.isSignup) {
-      this.state.users.map((key) => {
-        const users = Object.keys(key)
-        const newValue = users.includes("tylermcginnis")
-        console.log(newValue)
-      });
+      this.props.loginAction(this.state.id);
+
+      //   this.state.users.map((key) => {
+      //     const users = Object.keys(key);
+      //     const newValue = users.includes("tylermcginnis");
+      //     console.log(newValue);
+      //   });
 
       //console.log(this.state.id)
       // this.state.users.map((b) => {
@@ -116,6 +129,8 @@ class SignUp extends Component {
       //console.log(newValue)
       //this.props.loginAction(this.state.email, this.state.password)
     }
+
+   
   };
 
   /* Enable typing in text boxes */
@@ -134,8 +149,10 @@ class SignUp extends Component {
 
   /* Render sign up form */
   render() {
+    const { classes } = this.props;
+    let errorMessage = null;
     const formElementsArray = [];
-
+    const { loggedIn } = this.props;
     for (let key in this.state.controls) {
       formElementsArray.push({
         id: key,
@@ -143,64 +160,70 @@ class SignUp extends Component {
       });
     }
 
-    const { classes } = this.props;
+    const form = (
+      <div className={classes.paper}>
+        <Typography variant='h2' marked='center' align='center'>
+          Would You Rather
+        </Typography>
+        <form className={classes.form} onSubmit={this.submitHandler} noValidate>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}></Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant='outlined'
+              required
+              fullWidth
+              id='id'
+              label='user id'
+              value={this.state.email}
+              name='id'
+              autoComplete='id'
+              onChange={this.handleChange}
+            />
+            <div style={{ fontSize: 12, color: "red" }}>
+              {this.state.idError}
+            </div>
+          </Grid>
+          <Button
+            id='sign-up-button'
+            fullWidth
+            variant='contained'
+            color='primary'
+            className={classes.submit}
+            //   onClick={() =>
+            //     this.props.loginAction(this.state.email, this.state.password)
+            //   }
 
-    let errorMessage = null;
+            onClick={this.submitHandler}
+          >
+            Submit
+          </Button>
+        </form>
+        <Button onClick={this.switchAuthModeHandler}>
+          SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
+        </Button>
+      </div>
+    );
+
+    const logIn = <div> Test </div>
 
     if (this.props.error) {
       errorMessage = <p>{this.props.error.message}</p>;
     }
+
+
+    console.log(this.props.authState.loggedIn)
+    if (this.props.authState.loggedIn) {
+        return ( <Dashboard/>)
+      }
+
     return (
+     
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
-
-        <div className={classes.paper}>
-          <Typography variant='h2' marked='center' align='center'>
-            Would You Rather
-          </Typography>
-          <form
-            className={classes.form}
-            onSubmit={this.submitHandler}
-            noValidate
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}></Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                id='id'
-                label='user id'
-                value={this.state.email}
-                name='id'
-                autoComplete='id'
-                onChange={this.handleChange}
-              />
-              <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.idError}
-              </div>
-            </Grid>
-            <Button
-              id='sign-up-button'
-              fullWidth
-              variant='contained'
-              color='primary'
-              className={classes.submit}
-              //   onClick={() =>
-              //     this.props.loginAction(this.state.email, this.state.password)
-              //   }
-
-              onClick={this.submitHandler}
-            >
-              Sign Up
-            </Button>
-          </form>
-          <Button onClick={this.switchAuthModeHandler}>
-            SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-          </Button>
-        </div>
+       {form}
+      {/* // {console.log(`This is from store:store ${store.getState().authState.loggedIn}`)} */}
       </Container>
     );
   }
@@ -217,15 +240,13 @@ class SignUp extends Component {
 //     };
 // };
 
-const mapStateToProps = (state) => ({
-  ...state,
-});
+const mapStateToProps = state => ({
+    ...state
+  });
 
 const mapDispatchToProps = (dispatch) => ({
-  registerAction: (email, password) =>
-    dispatch(registerAction(email, password)),
-
-  loginAction: (email, password) => dispatch(loginAction(email, password)),
+  registerAction: (id) => dispatch(registerAction(id)),
+  loginAction: (id) => dispatch(loginAction(id)),
 });
 
 export default connect(
