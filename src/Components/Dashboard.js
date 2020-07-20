@@ -183,19 +183,14 @@ class Dashboard extends Component {
         activeIndex: 0,
       },
       {
-        name: "Offered",
-        link: "/Offered",
+        name: "Leaderboard",
+        link: "/Leaderboard",
         activeIndex: 1,
       },
       {
-        name: "About",
-        link: "/About",
+        name: "Add Poll",
+        link: "/AddPoll",
         activeIndex: 2,
-      },
-      {
-        name: "Contact",
-        link: "/Contact",
-        activeIndex: 3,
       },
     ];
 
@@ -227,133 +222,26 @@ class Dashboard extends Component {
             />
           ))}
         </Tabs>
+        <Button
+        component={Link}
+        color='secondary'
+        href='/Signup'
+        variant='contained'
+        className={classes.cusmButton}
+      >
+        Logout
+      </Button>
 
-        {/* <Menu
-          id='simple-menu'
-          anchorEl={anchorEl}
-          open={openMenu}
-          onClose={handleClose}
-          classes={{ paper: classes.menu }}
-          props={{ onMouseLeave: handleClose }}
-          elevation={0}
-          keepMounted
-          style={{ zIndex: 1302 }}
-        ></Menu> */}
+       <Typography>{`this ${this.props.authState}`} </Typography>
+       
       </React.Fragment>
     );
-
-    // const drawer = (
-    //   <React.Fragment>
-    //     <SwipeableDrawer
-    //       disableBackdropTransition={!iOS}
-    //       disableDiscovery={iOS}
-    //       open={openDrawer}
-    //       onClose={() => setOpenDrawer(false)}
-    //       onOpen={() => setOpenDrawer(true)}
-    //       classes={{ paper: classes.drawer }}
-    //     >
-    //       <div className={classes.toobarMargin} />
-    //       <List disablePadding>
-    //         <ListItem
-    //           onClick={() => {
-    //             setOpenDrawer(false);
-    //             this.props.setValue(0);
-    //           }}
-    //           divider
-    //           button
-    //           component={Link}
-    //           to='/'
-    //           selected={this.props.value === 0}
-    //           classes={{ selecte: classes.drawerItemSelected }}
-    //         >
-    //           <ListItemText className={classes.drawerItem} disableTypography>
-    //             Home
-    //           </ListItemText>
-    //         </ListItem>
-    //         <ListItem
-    //           onClick={() => {
-    //             setOpenDrawer(false);
-    //             this.props.setValue(1);
-    //           }}
-    //           divider
-    //           button
-    //           component={Link}
-    //           to='/Offered'
-    //           selected={this.props.value === 1}
-    //         >
-    //           <ListItemText
-    //             className={
-    //               this.props.value === 1
-    //                 ? [classes.drawerItem, classes.drawerItemSelected]
-    //                 : classes.drawerItemSelected
-    //             }
-    //             disableTypography
-    //           >
-    //             Offered
-    //           </ListItemText>
-    //         </ListItem>
-    //         <ListItem
-    //           onClick={() => {
-    //             setOpenDrawer(false);
-    //             this.props.setValue(2);
-    //           }}
-    //           divider
-    //           button
-    //           component={Link}
-    //           to='/About'
-    //           selected={this.props.value === 2}
-    //         >
-    //           <ListItemText
-    //             className={
-    //               this.props.value === 2
-    //                 ? [classes.drawerItem, classes.drawerItemSelected]
-    //                 : classes.drawerItemSelected
-    //             }
-    //             disableTypography
-    //           >
-    //             About
-    //           </ListItemText>
-    //         </ListItem>
-    //         <ListItem
-    //           onClick={() => {
-    //             setOpenDrawer(false);
-    //             this.props.setValue(3);
-    //           }}
-    //           divider
-    //           button
-    //           component={Link}
-    //           to='/Contact'
-    //           selected={this.props.value === 3}
-    //         >
-    //           <ListItemText
-    //             className={
-    //               this.props.value === 3
-    //                 ? [classes.drawerItem, classes.drawerItemSelected]
-    //                 : classes.drawerItemSelected
-    //             }
-    //             disableTypography
-    //           >
-    //             Contact
-    //           </ListItemText>
-    //         </ListItem>
-    //       </List>
-    //     </SwipeableDrawer>
-
-    //     <IconButton
-    //       className={classes.drawerIconContainer}
-    //       color='secondary'
-    //       onClick={() => setOpenDrawer(!openDrawer)}
-    //       disableRipple
-    //     >
-    //       <MenuIcon className={classes.drawerIcon} />
-    //     </IconButton>
-    //   </React.Fragment>
-    // );
 
     return (
     <React.Fragment>
       <ElevationScroll>
         <AppBar position='fixed' className={classes.appbar}>
+          <Typography variant="h5">Welcome</Typography>
           <Toolbar disableGutters={false}>
             <Button
               disableRipple
@@ -367,19 +255,23 @@ class Dashboard extends Component {
         </AppBar>
       </ElevationScroll>
       <div className={classes.toobarMargin} />
+      <ul>
+        {this.props.userIds.map((id) => (
+          <li key={id}> {id} </li>
+        ))}
+      </ul>
+     {console.log(this.props.userIds)}
     </React.Fragment>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  ...state,
-});
+function mapStateToProps ({ users} ) {
+  return {
+    userIds: Object.keys(users)
+  }
+}
 
 export default connect(
     mapStateToProps,
   )(withStyles(useStyles, { withTheme: true })(Dashboard));
-
-
-// (withStyles(useStyles, { withTheme: true })(SignUp));
-// export default connect(mapStateToProps)(Dashboard);

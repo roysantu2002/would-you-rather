@@ -3,15 +3,12 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./UI/App.css";
 import Signup from "./Signup";
 import theme from "./UI/AppTheme";
-import { ThemeProvider } from "@material-ui/styles";
-import { createStore } from "redux";
-import middleware from "../middleware";
-import reducer from "../reducers";
-import { Provider } from "react-redux";
+import { ThemeProvider } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Dashboard from "./Dashboard";
 import { connect } from "react-redux";
-import store from "../store";
+import { handleInitialData } from '../actions/shared'
+
 
 class App extends Component {
   state = {
@@ -20,22 +17,24 @@ class App extends Component {
 
   componentDidMount() {
  
-    this.setState({ loggedIn: this.props.authState.loggedIn });
+    this.props.dispatch(handleInitialData())
+    // this.setState({ loggedIn: this.props.authState.loggedIn });
   }
 
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+       <CssBaseline />
 
         <BrowserRouter>
-          <Switch>
+        <Dashboard/>
+          {/* <Switch>
             {!this.state.loggedIn ? (
               <Route path='/' exact component={Signup} />
             ) : (
               <Route path='/' component={Dashboard} />
             )}
-          </Switch>
+          </Switch> */}
           {/* <Signup/> */}
           {/* <Dashboard
           value={value}
@@ -49,5 +48,5 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ ...state });
-export default connect(mapStateToProps, {})(App);
+// const mapStateToProps = (state) => ({ ...state });
+export default connect()(App);

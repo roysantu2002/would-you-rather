@@ -118,17 +118,33 @@ let users = {
   function generateUID () {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
+
+//   export function _addUser(user){
+//     return new Promise((res, rej) => {
+//       console.log("!!!!!")
+//       users.aaaaaaaa = user
+
+//       // console.log(user.id)
+//       // setTimeout(() => {
+//       //   users: users.concat([user])
+//     //   res()
+//     // }, 500)
+// })
+// }
   
   export function _getUsers () {
     return new Promise((res, rej) => {
       setTimeout(() => res({...users}), 1000)
     })
+    
   }
   
   export function _getQuestions () {
     return new Promise((res, rej) => {
       setTimeout(() => res({...questions}), 1000)
+      
     })
+    
   }
   
   export function formatQuestion ({ optionOneText, optionTwoText, author }) {
@@ -147,6 +163,7 @@ let users = {
     }
   }
   
+
   export function _saveQuestion (question) {
     return new Promise((res, rej) => {
       const authedUser = question.author;

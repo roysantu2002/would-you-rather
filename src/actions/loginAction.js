@@ -2,7 +2,6 @@
 
 import * as dataApi from "../utils/_DATA";
 
-
 const loginAction = (id) => async (dispatch) => {
   let users = [];
   let isFound = false;

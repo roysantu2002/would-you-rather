@@ -93,41 +93,13 @@ class SignUp extends Component {
   submitHandler = (event) => {
     event.preventDefault();
     const isValid = this.checkValidity();
-    //console.log(isValid)
 
-    // this.state.users.forEach(function (element) {
-    //   console.log(element.values());
-    // }); /* outputs:onetwothreefour*/
-
-    //console.log(this.state.users[0].id)
-
-    if (isValid && !this.state.isSignup) {
+    if (isValid) {
       this.props.loginAction(this.state.id);
-
-      //   this.state.users.map((key) => {
-      //     const users = Object.keys(key);
-      //     const newValue = users.includes("tylermcginnis");
-      //     console.log(newValue);
-      //   });
-
-      //console.log(this.state.id)
-      // this.state.users.map((b) => {
-      //    console.log(b[0])
-      // })
-      // this.state.users.map(user => {
-      //     //const newValue = user.includes("tylermcginnis")
-      //     // if(user === this.state.id){
-      //         console.log(user.values())
-      //     // }
-      // });
-      // {this.state.users.filter(user => user.id).map(filteredPerson => (
-      //       console.log('filteredPerson.name')
-      //   ))}
-      //const newValue = this.state.users.includes("tylermcginnis");
-      //const newValue = this.state.users.filter( (number)=> number === this.state.id);
-      //const found = this.state.users.find(element =>  console.log(element));
-      //console.log(newValue)
-      //this.props.loginAction(this.state.email, this.state.password)
+    }
+    if (isValid && this.state.isSignup) {
+      console.log("addding data")
+      this.props.registerAction(this.state.id);
     }
 
    
@@ -200,9 +172,9 @@ class SignUp extends Component {
             Submit
           </Button>
         </form>
-        <Button onClick={this.switchAuthModeHandler}>
+        {/* <Button onClick={this.switchAuthModeHandler}>
           SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-        </Button>
+        </Button> */}
       </div>
     );
 
@@ -229,16 +201,6 @@ class SignUp extends Component {
   }
 }
 
-// const mapStateToProps = state => {
-//     return {
-//         ...state,
-//         // loading: state.auth.loading,
-//         // error: state.auth.error,
-//         // isAuthenticated: state.auth.token !== null,
-//         // buildingBurger: state.burgerBuilder.building,
-//         // authRedirectPath: state.auth.authRedirectPath
-//     };
-// };
 
 const mapStateToProps = state => ({
     ...state
