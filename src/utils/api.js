@@ -6,7 +6,7 @@ import {
     return Promise.all([
       _getUsers(),
     ]).then(([users]) => ({
-      users
+      users,
     }))
   }
   

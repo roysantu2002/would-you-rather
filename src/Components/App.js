@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./UI/App.css";
-import Signup from "./Signup";
+// import Signup from "./Signup";
 import theme from "./UI/AppTheme";
 import { ThemeProvider } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,16 +9,14 @@ import Dashboard from "./Dashboard";
 import { connect } from "react-redux";
 import { handleInitialData } from '../actions/shared'
 
-
 class App extends Component {
   state = {
-    loggedIn: "",
+    loggedIn: ""
+
   };
 
   componentDidMount() {
- 
     this.props.dispatch(handleInitialData())
-    // this.setState({ loggedIn: this.props.authState.loggedIn });
   }
 
   render() {
@@ -37,10 +35,10 @@ class App extends Component {
           </Switch> */}
           {/* <Signup/> */}
           {/* <Dashboard
-          value={value}
-          setValue={setValue}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex}
+          value={0}
+          setValue={0}
+          selectedIndex={0}
+          setSelectedIndex={0}
         /> */}
         </BrowserRouter>
       </ThemeProvider>
@@ -48,5 +46,4 @@ class App extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({ ...state });
 export default connect()(App);

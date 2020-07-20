@@ -232,7 +232,7 @@ class Dashboard extends Component {
         Logout
       </Button>
 
-       <Typography>{`this ${this.props.authState}`} </Typography>
+       <Typography>{`${this.props.authedUser}`} </Typography>
        
       </React.Fragment>
     );
@@ -260,14 +260,15 @@ class Dashboard extends Component {
           <li key={id}> {id} </li>
         ))}
       </ul>
-     {console.log(this.props.userIds)}
+     {console.log(this.props)}
     </React.Fragment>
     )
   }
 }
 
-function mapStateToProps ({ users} ) {
+function mapStateToProps ({ authedUser, users }) {
   return {
+    authedUser,
     userIds: Object.keys(users)
   }
 }
