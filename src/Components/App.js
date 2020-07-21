@@ -1,49 +1,57 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./UI/App.css";
 // import Signup from "./Signup";
 import theme from "./UI/AppTheme";
-import { ThemeProvider } from "@material-ui/styles"
+import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Dashboard from "./Dashboard";
+import Nav from "./Nav";
 import { connect } from "react-redux";
-import { handleInitialData } from '../actions/shared'
+import { handleInitialData } from "../actions/shared";
+import LoadingBar from "react-redux-loading";
+import Login from "./Login";
+import Questions from './Questions'
 
 class App extends Component {
   state = {
-    loggedIn: ""
-
+    loggedIn: "",
   };
 
   componentDidMount() {
-    this.props.dispatch(handleInitialData())
+   
+    const AUTHED_ID = null;
+    this.props.dispatch(handleInitialData(AUTHED_ID));
+    console.log(this.props.authedUser)
+
   }
 
   render() {
+  
     return (
-      <ThemeProvider theme={theme}>
-       <CssBaseline />
 
-        <BrowserRouter>
-        <Dashboard/>
-          {/* <Switch>
-            {!this.state.loggedIn ? (
-              <Route path='/' exact component={Signup} />
-            ) : (
-              <Route path='/' component={Dashboard} />
-            )}
-          </Switch> */}
-          {/* <Signup/> */}
-          {/* <Dashboard
-          value={0}
-          setValue={0}
-          selectedIndex={0}
-          setSelectedIndex={0}
-        /> */}
-        </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Fragment>
+
+            {/* <LoadingBar />  */}
+       
+            <Route path='/' exact component={Login} />
+              // {/* {this.props.authedUser === null
+              // ? <Route path='/' exact component={Login} /> */}
+              // {/* : <Route path='/' exact component={Questions} />} */}
+               </Fragment>
+        </Router>
       </ThemeProvider>
     );
   }
 }
 
-export default connect()(App);
+function mapStateToProps ({ authedUser, users }) {
+  return {
+    authedUser,
+    users
+  }
+}
+export default connect(mapStateToProps)(App)
+
