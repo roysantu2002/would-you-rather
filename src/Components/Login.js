@@ -9,8 +9,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import Typography from "./UI/Typography";
-import Dashboard from "./Dashboard"
-import { setAuthedUser } from '../actions/authedUser'
+import Dashboard from "./Dashboard";
+import { setAuthedUser } from "../actions/authedUser";
 
 const useStyles = (theme) => ({
   paper: {
@@ -40,13 +40,10 @@ class Login extends Component {
   state = {
     users: [],
     id: "",
-    idError:""
-
+    idError: "",
   };
 
-  componentDidMount() {
-   
-  }
+  componentDidMount() {}
 
   checkValidity = () => {
     let isValid = true;
@@ -74,15 +71,16 @@ class Login extends Component {
     const isValid = this.checkValidity();
 
     if (isValid) {
-
-     const usersId = this.props.users
-     const isFound = usersId.includes(this.state.id)
-     if(isFound){
-      this.props.setAuthedUser(this.state.id)
-     }
-     else{this.setState({ idError: "id not found!!" });}
+      //console.log(this.props.users[this.state.id].avatarURL);
+      const usersId = Object.keys(this.props.users);
+      console.log(usersId)
+      const isFound = usersId.includes(this.state.id);
+      if (isFound) {
+        this.props.setAuthedUser(this.state.id);
+      } else {
+        this.setState({ idError: "id not found!!" });
+      }
     }
-
   };
 
   /* Enable typing in text boxes */
@@ -101,7 +99,6 @@ class Login extends Component {
 
   /* Render sign up form */
   render() {
-
     const { classes } = this.props;
     const formElementsArray = [];
     for (let key in this.state.controls) {
@@ -157,7 +154,6 @@ class Login extends Component {
       </div>
     );
 
-
     // if (this.props.error) {
     //   errorMessage = <p>{this.props.error.message}</p>;
     // }
@@ -168,29 +164,27 @@ class Login extends Component {
     //   }
 
     return (
-     
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
-       {form}
-      {/* // {console.log(`This is from store:store ${store.getState().authState.loggedIn}`)} */}
+        {form}
+        {/* // {console.log(`This is from store:store ${store.getState().authState.loggedIn}`)} */}
       </Container>
     );
   }
 }
 
-
-function mapStateToProps ({ users }) {
+function mapStateToProps({ users }) {
   return {
-      users : Object.keys(users)
-}
+    users,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-      setAuthedUser: (id) => {
-          dispatch(setAuthedUser(id))
-      }
-  }
+    setAuthedUser: (id) => {
+      dispatch(setAuthedUser(id));
+    },
+  };
 }
 export default connect(
   mapStateToProps,

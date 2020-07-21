@@ -5,12 +5,11 @@ import "./UI/App.css";
 import theme from "./UI/AppTheme";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Nav from "./Nav";
 import { connect } from "react-redux";
 import { handleInitialData } from "../actions/shared";
 import LoadingBar from "react-redux-loading";
 import Login from "./Login";
-import Questions from './Questions'
+import Dashboard from './Dashboard'
 
 class App extends Component {
   state = {
@@ -34,12 +33,12 @@ class App extends Component {
         <Router>
           <Fragment>
 
-            {/* <LoadingBar />  */}
+            <LoadingBar /> 
        
-            <Route path='/' exact component={Login} />
-              // {/* {this.props.authedUser === null
-              // ? <Route path='/' exact component={Login} /> */}
-              // {/* : <Route path='/' exact component={Questions} />} */}
+            {/* <Route path='/' exact component={Login} />  */}
+            {this.props.authedUser === null
+               ? <Route path='/' exact component={Login} /> 
+               : <Route path='/' exact component={Dashboard} />}
                </Fragment>
         </Router>
       </ThemeProvider>

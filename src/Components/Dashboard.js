@@ -8,6 +8,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Avatar from "@material-ui/core/Avatar";
 import PhoneIcon from "@material-ui/icons/Phone";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
@@ -27,11 +28,12 @@ import { useTheme } from "@material-ui/core/styles";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
-import { TextareaAutosize } from "@material-ui/core";
+import { TextareaAutosize, Grid } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { setAuthedUser } from '../actions/authedUser'
 
 //Header elevator
 
@@ -83,7 +85,7 @@ function a11yProps(index) {
 //tabs functoions
 //Styles
 
-const useStyles = theme => ({
+const useStyles = (theme) => ({
   toobarMargin: {
     ...theme.mixins.toolbar,
     marginBottom: "3em",
@@ -139,11 +141,21 @@ const useStyles = theme => ({
   appbar: {
     zIndex: theme.zIndex.modal + 1,
   },
+
+  button: {
+    marginRight: 20,
+  },
 });
 
-
-
 class Dashboard extends Component {
+
+  //handle Logout
+  handleLogout = () => {
+    const { setAuthedUser, history } = this.props;
+    setAuthedUser(null);
+    history.push("/");
+  };
+
   render() {
     // console.log(this.props.authState.loggedIn);
     // const theme = useTheme();
@@ -222,57 +234,69 @@ class Dashboard extends Component {
             />
           ))}
         </Tabs>
-        <Button
-        component={Link}
-        color='secondary'
-        href='/Signup'
-        variant='contained'
-        className={classes.cusmButton}
-      >
-        Logout
-      </Button>
 
-       <Typography>{`${this.props.authedUser}`} </Typography>
-       
+        <Button
+          component={Link}
+          color='secondary'
+          href='/Signup'
+          variant='contained'
+          className={classes.button}
+          onClick={this.handleLogout}
+        >
+          Logout
+        </Button>
+        <Grid spacing={2}>
+          <Grid item align='center'>
+            <Avatar
+              alt={this.props.authedUser}
+              src={this.props.users[this.props.authedUser].avatarURL}
+            />
+          </Grid>
+          <Grid item>
+            <Typography marginBottom='10'>
+              {`${this.props.authedUser}`}{" "}
+            </Typography>
+          </Grid>
+        </Grid>
       </React.Fragment>
     );
 
     return (
-    <React.Fragment>
-      <ElevationScroll>
-        <AppBar position='fixed' className={classes.appbar}>
-          <Typography variant="h5">Welcome</Typography>
-          <Toolbar disableGutters={false}>
-            <Button
-              disableRipple
-              className={classes.logoContainer}
-              component={Link}
-              to='/'
-              onClick={() => this.props.setValue(0)}
-            ></Button>
-            {tabs} 
-          </Toolbar>
-        </AppBar>
-      </ElevationScroll>
-      <div className={classes.toobarMargin} />
-      <ul>
-        {this.props.userIds.map((id) => (
-          <li key={id}> {id} </li>
-        ))}
-      </ul>
-     {console.log(this.props)}
-    </React.Fragment>
-    )
+      <React.Fragment>
+        <ElevationScroll>
+          <AppBar position='fixed' className={classes.appbar}>
+            <Typography variant='h5'>Welcome</Typography>
+            <Toolbar disableGutters={false}>
+              <Button
+                disableRipple
+                className={classes.logoContainer}
+                component={Link}
+                to='/'
+                onClick={() => this.props.setValue(0)}
+              ></Button>
+              {tabs}
+            </Toolbar>
+          </AppBar>
+        </ElevationScroll>
+        <div className={classes.toobarMargin} />
+      </React.Fragment>
+    );
   }
 }
 
-function mapStateToProps ({ authedUser, users }) {
+function mapStateToProps({ authedUser, users }) {
   return {
     authedUser,
-    userIds: Object.keys(users)
+    users,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+      setAuthedUser: (id) => {
+          dispatch(setAuthedUser(id))
+      }
   }
 }
-
-export default connect(
-    mapStateToProps,
-  )(withStyles(useStyles, { withTheme: true })(Dashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(useStyles, { withTheme: true })(Dashboard)
+);
