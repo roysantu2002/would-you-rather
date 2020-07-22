@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
 
-export default class Dashboard extends Component {
+export default class Addpoll extends Component {
     render() {
         return (
             <div>
-                <Navbar/>
+                {/* <Navbar/> */}
+                Addpoll
             </div>
         )
     }
