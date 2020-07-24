@@ -105,9 +105,9 @@ const useStyles = (theme) => ({
     marginLeft: "50px",
   },
 
-  appbar: {
-    zIndex: theme.zIndex.modal + 1,
-  },
+  // appbar: {
+  //   zIndex: theme.zIndex.modal + 1,
+  // },
 
   button: {
     marginRight: "50px",
@@ -151,75 +151,10 @@ class Dashboard extends Component {
       console.log(newValue);
     };
 
-    // const routes = [
-    //   {
-    //     name: "Home",
-    //     link: "/",
-    //     activeIndex: 0,
-    //   },
-    //   {
-    //     name: "Leaderboard",
-    //     link: "/leaderboard",
-    //     activeIndex: 1,
-    //   },
-    //   {
-    //     name: "Add Poll",
-    //     link: "/addPoll",
-    //     activeIndex: 2,
-    //   },
-    // ];
-
-    // const tabs = (
-    //   <React.Fragment>
-    //     <Tabs
-    //       className={classes.tabContainer}
-    //       color='secondary'
-    //       value={this.state.value}
-    //       onChange={handleChange}
-    //       variant='scrollable'
-    //       scrollButtons='on'
-    //       indicatorColor='secondary'
-    //       textColor='secondary'
-    //       aria-label='scrollable'
-    //     >
-    //       {routes.map((route, index) => (
-    //         <Tab
-    //           className={classes.tab}
-    //           key={`${route}${index}`}
-    //           component={Link}
-    //           to={route.link}
-    //           label={route.name}
-    //           {...a11yProps(route.index)}
-    //         />
-    //       ))}
-    //     </Tabs>
-
-    //     <Button
-    //       component={Link}
-    //       color='secondary'
-    //       variant='contained'
-    //       className={classes.button}
-    //       onClick={this.handleLogout}
-    //     >
-    //       Logout
-    //     </Button>
-    //     <Grid spacing={2}>
-    //       <Grid item align='center'>
-    //         <Avatar alt={this.props.authedUser} src={this.state.avatarURL} />
-    //       </Grid>
-    //       <Grid item>
-    //         <Typography marginBottom='10'>
-    //           {`${this.props.authedUser}`}{" "}
-    //         </Typography>
-    //       </Grid>
-    //     </Grid>
-    //   </React.Fragment>
-    // );
-
     return (
       <React.Fragment>
         <ElevationScroll>
-          <AppBar position='fixed' className={classes.appbar}>
+          <AppBar position='float' className={classes.appbar}>
             <Typography variant='h5'>Welcome</Typography>
             <Toolbar disableGutters>
               <Tabs

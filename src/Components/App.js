@@ -11,8 +11,9 @@ import LoadingBar from "react-redux-loading";
 import Navbar from "./Navbar";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
-import Leaderboard from "./Leaderboard";
+
 import AddPoll from "./Addpoll";
+import LeadersCard from "./LeadersCard";
 
 class App extends Component {
   state = {
@@ -41,7 +42,7 @@ class App extends Component {
                 <Fragment>
                   <Navbar/>
                   <Route path='/' exact component={Dashboard} />
-                  <Route path='/leaderboard' component={Leaderboard} />
+                  <Route path='/leaderboard' component={LeadersCard} />
                   <Route path='/addpoll' component={AddPoll} />
                 </Fragment>
               )}
