@@ -75,15 +75,15 @@ class Answered extends React.Component {
     this.state = { influencerList: [] };
   }
   componentDidMount() {
-    const influencerLocalData = [];
-    const influencerRemoteData = []
+    // const influencerLocalData = [];
+    // const influencerRemoteData = [];
 
-    const usersId = Object.keys(this.props.users);
+    // const usersId = Object.keys(this.props.users);
 
     //   data.map((postData) => {
     //     influencerLocalData.push(postData);
     //   });
-    
+
     //console.log(influencerData)
     // this.setState(() => ({
     //   influencerList: influencerLocalData,
@@ -94,10 +94,10 @@ class Answered extends React.Component {
     //   querySnapshot.map((query) => {
     //     influencerRemoteData.push(query)
     //   })
-      //console.log(`From firebase ${querySnapshot}`)
-      this.setState(() => ({
-        influencerList: usersId,
-      }));
+    //console.log(`From firebase ${querySnapshot}`)
+    // this.setState(() => ({
+    //   influencerList: usersId,
+    // }));
     // });
   }
   // export default function WhoList() {
@@ -114,73 +114,52 @@ class Answered extends React.Component {
   // });
 
   render() {
-    const { classes } = this.props;
+    const { classes, poll } = this.props;
 
-    const whoList =  
-    <Grid container className={classes.root} spacing={2}>
-    <Grid item xs={6}>
-      <Typography variant='h1' marked='center' align='center'>
-        Be Inspired
-      </Typography>
-    </Grid>
-    <Grid item xs={12}>
-      <Grid container justify='center' spacing={2}>
-        {/* // <div className={classes.root}>
-  //    <GridList cellHeight={180} className={classes.gridList}> */}
-        {/* <Container className={classes.root} component='section'> */}
-        {this.state.influencerList.map((influencer) => (
-          <Card className={classes.card}>
-            {/* <CardMedia className={classes.media} image={influencer.img} /> */}
-            <CardContent className={classes.content}>
-              <Typography
-                variant="h5"
-                gutterBottom
-              >
-                {influencer}
-              </Typography>
-              <Typography
-                className={"MuiTypography--heading"}
-                variant={"h6"}
-                gutterBottom
-              >
-                {/* {influencer.birthplace} */}
-              </Typography>
-              <Typography
-                className={"MuiTypography--subheading"}
-                variant="subtitle1"
-              >
-                {/* {influencer.contributions} */}
-              </Typography>
-              <Divider className={classes.divider} light />
-              <Grid
-                item
-                component={"a"}
-                rel='noopener noreferrer'
-                target='_blank'
-                // href={influencer.ref}
-              >
-                <button
-                >Know More</button>
-              </Grid>
-            </CardContent>
-          </Card>
-        ))}
-      </Grid>
-    </Grid>
-  </Grid>
-  
-    // console.log(this.state.influencerList);
-    return (
-  
-      whoList
-      )
+    if (poll === null) {
+      return <p>This poll doesn't exist</p>;
+    }
+
+    const { optionOne, optionTwo } = poll;
+    const { id } = this.props;
+
+    const whoList = (
+
+              <Card className={classes.card}>
+                <CardContent className={classes.content}>
+                  <Typography variant="h5" gutterBottom>
+                  {optionOne.text}
+                  </Typography>
+                  <Typography
+                    className={"MuiTypography--heading"}
+                    variant={"h6"}
+                    gutterBottom
+                  >
+                  </Typography>
+                  <Typography
+                    className={"MuiTypography--subheading"}
+                    variant="subtitle1"
+                  >
+                    {optionTwo.text}
+                  </Typography>
+             
+                </CardContent>
+              </Card>
+    )
+    return whoList;
   }
 }
 
-function mapStateToProps({ users }) {
-    return {
-      users
-    };
-  }
+function mapStateToProps({ authedUser, polls }, { id }) {
+  const poll = polls[id];
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Answered));;
+  return {
+    authedUser,
+    poll,
+    id,
+  };
+}
+
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(Answered)
+);

@@ -1,8 +1,9 @@
 import { getInitialData, addPollAPI } from '../utils/api'
 import { receiveUsers, addUserPoll } from '../actions/users'
-import { addPoll } from '../actions/polls'
+import { addPoll, receivePolls } from '../actions/polls'
 import { setAuthedUser } from '../actions/authedUser'
 import { showLoading, hideLoading } from 'react-redux-loading'
+import { getInitialPolls } from '../utils/api'
 
 // const AUTHED_ID = 'tylermcginnis'
 
@@ -35,3 +36,15 @@ export function addPollAction (optionOneText, optionTwoText) {
             })
     }
 }
+
+export function handleInitialPolls () {
+    return (dispatch) => {
+        dispatch(showLoading())
+        return getInitialPolls()
+            .then((questions) => {
+                dispatch(receivePolls(questions))
+                dispatch(hideLoading())
+            })
+    }
+}
+
