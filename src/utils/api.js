@@ -1,5 +1,6 @@
 import {
     _getUsers,
+    _saveQuestion,
   } from './_DATA.js'
   
   export function getInitialData () {
@@ -10,3 +11,6 @@ import {
     }))
   }
   
+  export function addPollAPI (info) {
+    return _saveQuestion(info)
+}

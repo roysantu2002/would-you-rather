@@ -99,6 +99,7 @@ class Login extends Component {
 
   /* Render sign up form */
   render() {
+    
     const { classes } = this.props;
     const formElementsArray = [];
     for (let key in this.state.controls) {
