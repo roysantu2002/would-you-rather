@@ -1,5 +1,7 @@
 export const RECEIVE_USERS = 'RECEIVE_USERS'
 export const ADD_USER_POLL = 'ADD_USER_POLL'
+export const SAVE_USER_ANSWER = 'SAVE_USER_ANSWER'
+
 
 export function receiveUsers (users) {
     return {
@@ -13,5 +15,14 @@ export function addUserPoll (authedUser, id) {
         type: ADD_USER_POLL,
         authedUser,
         id,
+    }
+}
+
+export function saveUserAnswer (authedUser, qid, answer) {
+    return {
+        type: SAVE_USER_ANSWER,
+        authedUser,
+        qid,
+        answer
     }
 }

@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
+import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
@@ -68,6 +69,12 @@ const styles = (theme) => ({
       marginLeft: theme.spacing.unit,
     },
   },
+  cardLink: {
+    textDecoration: 'none',
+    "&:hover":{
+      backgroundColor: "transparent"
+    }
+  }
 });
 
 class Answered extends React.Component {
@@ -90,13 +97,16 @@ class Answered extends React.Component {
     const { id } = this.props;
 
     const whoList = (
-      <Link to={`/questions/${id}`} className='form margin poll-form'>
-      <Card className={classes.card}>
+    
+      // 
+      <Link underline='none' to={`/questions/${id}`} className={classes.cardLink}>
+   
+      <Card className={classes.card} >
         <CardContent className={classes.content}>
           <Typography variant="h6" gutterBottom color="primary">
             Would You Rather
           </Typography>
-
+        
           <Typography
             className={"MuiTypography--subheading"}
             variant="subtitle1"
@@ -111,8 +121,10 @@ class Answered extends React.Component {
           >
             {optionTwo.text}
           </Typography>
+         
         </CardContent>
       </Card>
+      
       </Link>
     );
     return whoList;

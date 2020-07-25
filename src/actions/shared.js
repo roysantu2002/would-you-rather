@@ -1,6 +1,6 @@
 import { getInitialData, addPollAPI } from '../utils/api'
-import { receiveUsers, addUserPoll } from '../actions/users'
-import { addPoll, receivePolls } from '../actions/polls'
+import { receiveUsers, addUserPoll, saveUserAnswer } from '../actions/users'
+import { addPoll, receivePolls, savePollAnswer} from '../actions/polls'
 import { setAuthedUser } from '../actions/authedUser'
 import { showLoading, hideLoading } from 'react-redux-loading'
 import { getInitialPolls } from '../utils/api'
