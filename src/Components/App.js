@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./UI/App.css";
-// import Signup from "./Signup";
+
 import theme from "./UI/AppTheme";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +14,7 @@ import Dashboard from "./Dashboard";
 
 import AddPoll from "./Addpoll";
 import LeadersCard from "./LeadersCard";
+import PollDetails from './PollDetails'
 
 class App extends Component {
   state = {
@@ -42,6 +43,7 @@ class App extends Component {
                 <Fragment>
                   <Navbar/>
                   <Route path='/' exact component={Dashboard} />
+                  <Route path='/questions/:question_id' component={PollDetails} />
                   <Route path='/leaderboard' component={LeadersCard} />
                   <Route path='/addpoll' component={AddPoll} />
                 </Fragment>

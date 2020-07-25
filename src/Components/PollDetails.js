@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { Component, useState, useEffect } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -8,14 +8,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-// import data from "../../src/data/influencer";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Grid from "@material-ui/core/Grid";
-// import * as getDataApi from "../../src/utils/getDataApi";
+import { formatDate } from '../utils/helpers'
+
 import { connect } from "react-redux";
+import { handleSavePollAnswer } from '../actions/shared'
 
 const styles = (theme) => ({
   root: {
@@ -70,27 +71,39 @@ const styles = (theme) => ({
   },
 });
 
-class Answered extends React.Component {
+class PollDetails extends Component {
+  state = {
+    selectedOption: "",
+  };
 
-  constructor(props) {
-    super(props);
-    this.state = { influencerList: [] };
-  }
-  
- 
+  selectRadio = (e) => {
+    this.setState({
+      selectedOption: e.target.value,
+    });
+  };
+
+  submitAnswer = (e) => {
+    e.preventDefault();
+
+    const { savePollAnswer } = this.props;
+    const answer = this.state.selectedOption;
+
+    // i have succesfully got the answer text now check the _data file to see what is the expected arguments
+
+    savePollAnswer(answer);
+  };
 
   render() {
-    const { classes, poll } = this.props;
+    const { classes } = this.props;
+    const { poll, authorAvatar, timestamp, author, optionOne, optionTwo, answered, isOneAnswered, isTwoAnswered } = this.props
+    const optionOneVotes = poll.optionOne.votes.length
+    const optionTwoVotes = poll.optionTwo.votes.length
+    const optionOnePercentage = (optionOneVotes / (optionOneVotes + optionTwoVotes) * 100).toFixed(2)
+    const optionTwoPercentage = (optionTwoVotes / (optionOneVotes + optionTwoVotes) * 100).toFixed(2)
 
-    if (poll === null) {
-      return <p>This poll doesn't exist</p>;
-    }
 
-    const { optionOne, optionTwo } = poll;
-    const { id } = this.props;
-
-    const whoList = (
-      <Link to={`/questions/${id}`} className='form margin poll-form'>
+    return (
+        answered ? <div> Ans </div> :
       <Card className={classes.card}>
         <CardContent className={classes.content}>
           <Typography variant="h6" gutterBottom color="primary">
@@ -113,22 +126,48 @@ class Answered extends React.Component {
           </Typography>
         </CardContent>
       </Card>
-      </Link>
     );
-    return whoList;
   }
 }
 
-function mapStateToProps({ authedUser, polls }, { id }) {
-  const poll = polls[id];
+function mapStateToProps({ authedUser, polls, users }, props) {
+  const { question_id } = props.match.params;
+  const poll = polls[question_id];
+  const authorAvatar = users[poll.author].avatarURL;
+  const author = users[poll.author].id;
+  const timestamp = formatDate(poll.timestamp);
+  const optionOne = poll.optionOne.text;
+  const optionTwo = poll.optionTwo.text;
+  const isOneAnswered = poll.optionOne.votes.includes(authedUser);
+  const isTwoAnswered = poll.optionTwo.votes.includes(authedUser);
+  const answered = isOneAnswered || isTwoAnswered;
 
   return {
-    authedUser,
+    authorAvatar,
+    author,
+    timestamp,
+    optionOne,
+    optionTwo,
+    answered,
+    isOneAnswered,
+    isTwoAnswered,
     poll,
-    id,
+    users,
+    polls,
+    authedUser,
+    question_id,
+  };
+}
+
+function mapDispatchToProps(dispatch, props) {
+  const { question_id } = props.match.params;
+  return {
+    savePollAnswer: (answer) => {
+      dispatch(handleSavePollAnswer(question_id, answer));
+    },
   };
 }
 
 export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(Answered)
+  withStyles(styles, { withTheme: true })(PollDetails)
 );

@@ -94,16 +94,6 @@ class Dashboard extends Component {
     const answered = 
     <section className={classes.root}>
     <Container  component="section">
-        {/* <Typography variant="h1"> Leader Board</Typography>
-           <Typography variant="h1"> Leader Board</Typography>
-           <Typography variant="h1"> Leader Board</Typography>
-           <Typography variant="h1"> Leader Board</Typography>
-   <Button onClick={this.switchAuthModeHandler}>
-     SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-   </Button>
-   <Button onClick={this.switchAuthModeHandler}>
-     SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-   </Button> */}
    <Typography variant='h5' marked='center' align='center' onClick={this.switchAuthModeHandler}>
    {/* <Button onClick={this.switchAuthModeHandler}> */}
      Switch To :  {this.state.isAnswered ? "Answered" : "Unanswered"}
@@ -125,7 +115,7 @@ class Dashboard extends Component {
 
       <Grid container className={classes.root} spacing={2}>
  
-    {this.state.isAnswered ? unansweredPolls.map((id) => ( <Grid item xs={6}><Answered id={id}/> </Grid>)) : <p> No</p> }
+    {this.state.isAnswered ? answeredPolls.map((id) => ( <Grid item xs={6}><Answered id={id}/> </Grid>)) : unansweredPolls.map((id) => ( <Grid item xs={6}><Answered id={id}/> </Grid>))  }
 
         {/* {!loadingBar.default && Object.keys(answeredPolls).length === 0 && this.state.isAnswered ?  <p className='no-results'>no results</p>  : null}
 

@@ -104,7 +104,15 @@ const useStyles = (theme) => ({
     minWidth: 10,
     marginLeft: "50px",
   },
-
+ home: {
+   align: 'left',
+   padding: 10,
+   marginRight: "200px",
+   color: "white",
+   "&:hover":{
+     backgroundColor: "transparent"
+   }
+ },
   // appbar: {
   //   zIndex: theme.zIndex.modal + 1,
   // },
@@ -155,7 +163,10 @@ class Dashboard extends Component {
       <React.Fragment>
         <ElevationScroll>
           <AppBar position='float' className={classes.appbar}>
-            <Typography variant='h5'>Welcome</Typography>
+
+            <Button disableRipple className={classes.home} component={Link} to="/">
+            <Typography variant='h5' color="white">Welcome</Typography>
+            </Button>
             <Toolbar disableGutters>
               <Tabs
                 value={this.state.value}

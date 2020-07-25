@@ -4,6 +4,8 @@ import { addPoll, receivePolls } from '../actions/polls'
 import { setAuthedUser } from '../actions/authedUser'
 import { showLoading, hideLoading } from 'react-redux-loading'
 import { getInitialPolls } from '../utils/api'
+import { savePollAPI, savePollAnswerAPI } from '../utils/api'
+
 
 // const AUTHED_ID = 'tylermcginnis'
 
@@ -45,6 +47,19 @@ export function handleInitialPolls () {
                 dispatch(receivePolls(questions))
                 dispatch(hideLoading())
             })
+    }
+}
+
+export function handleSavePollAnswer (qid, answer) {
+    return (dispatch, getState) => {
+        const { authedUser } = getState()
+        dispatch(showLoading())
+        return savePollAnswerAPI({authedUser, qid, answer})
+            .then(() => {
+                dispatch(savePollAnswer(authedUser, qid, answer))
+                dispatch(saveUserAnswer(authedUser, qid, answer))
+                dispatch(hideLoading())
+            })  
     }
 }
 
