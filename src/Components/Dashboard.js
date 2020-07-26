@@ -110,7 +110,7 @@ class Dashboard extends Component {
 
       <Typography variant='h5' marked='center' align='center' onClick={this.switchAuthModeHandler}>
 
-         Switch To :  {this.state.isAnswered ? "Answered" : "Unanswered"}
+         Switch To :  {this.state.isAnswered ? "Unanswered" : "Answered"}
    </Typography>
 
       <Grid container className={classes.root} spacing={2}>

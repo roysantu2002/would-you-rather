@@ -93,6 +93,7 @@ export default createMuiTheme({
     },
     h5:{
       fontFamily: 'Muli',
+      fontSize: "1.5rem",
       fontWeight: 700,
       color: `${red}`,
       lineHeight: 1.5
