@@ -63,3 +63,17 @@ export function handleSavePollAnswer (qid, answer) {
     }
 }
 
+export function handleAddPoll (optionOneText, optionTwoText) {
+    return (dispatch, getState) => {
+        const { authedUser } = getState()
+        const author = authedUser
+        dispatch(showLoading())
+        return savePollAPI({optionOneText, optionTwoText, author})
+            .then((poll) => {
+                dispatch(addPoll(poll))
+                dispatch(addUserPoll(authedUser, poll.id))
+                dispatch(hideLoading())
+            })
+    }
+}
+

@@ -31,3 +31,4 @@ export function savePollAnswerAPI (info) {
 export function savePollAPI (info) {
   return _saveQuestion(info)
 }
+

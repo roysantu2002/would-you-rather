@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -118,13 +118,13 @@ class PollDetails extends Component {
 
   submitAnswer = (e) => {
     e.preventDefault();
-
+   
     const { savePollAnswer } = this.props;
-    const answer = this.state.selectedOption;
-
-    // i have succesfully got the answer text now check the _data file to see what is the expected arguments
+    const answer = this.state.ans;
 
     savePollAnswer(answer);
+
+    return <Redirect to='/' />;
   };
 
   render() {
@@ -152,7 +152,7 @@ class PollDetails extends Component {
     ).toFixed(2);
 
     const form = (
-      <form onSubmit={this.submitHandler} noValidate>
+      <form onSubmit={this.submitAnswer} noValidate>
         <Grid container spacing={2}>
           <RadioGroup
             aria-label="gender"
@@ -161,12 +161,12 @@ class PollDetails extends Component {
             onChange={this.handleChange}
           >
             <FormControlLabel
-              value={optionOne}
+              value="optionOne"
               control={<Radio />}
               label={optionOne}
             />
             <FormControlLabel
-              value={optionTwo}
+              value="optionTwo"
               control={<Radio />}
               label={optionTwo}
             />
@@ -180,7 +180,7 @@ class PollDetails extends Component {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={this.submitHandler}
+              onClick={this.submitAnswer}
             >
               Submit
             </Button> 
@@ -263,15 +263,15 @@ function mapStateToProps({ authedUser, polls, users }, props) {
   };
 }
 
-function mapDispatchToProps(dispatch, props) {
-  const { question_id } = props.match.params;
+function mapDispatchToProps (dispatch, props) {
+  const { question_id } = props.match.params
   return {
-    savePollAnswer: (answer) => {
-      dispatch(handleSavePollAnswer(question_id, answer));
-    },
-  };
+      savePollAnswer : (answer) => {
+          dispatch(handleSavePollAnswer(question_id, answer))
+      }
+  }
 }
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(PollDetails)
 );
