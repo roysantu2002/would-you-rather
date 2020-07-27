@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
+import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -9,7 +8,6 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import Typography from "./UI/Typography";
-import Dashboard from "./Dashboard";
 import { setAuthedUser } from "../actions/authedUser";
 
 const useStyles = (theme) => ({
@@ -24,11 +22,14 @@ const useStyles = (theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%",
+    width: "70%",
     marginTop: theme.spacing(3),
+    alignItems: "center",
   },
   submit: {
+    
     margin: theme.spacing(3, 0, 2),
+
   },
   large: {
     width: theme.spacing(15),
@@ -46,7 +47,6 @@ class Login extends Component {
   componentDidMount() {}
 
   checkValidity = () => {
-    let isValid = true;
     let idError = "";
 
     if (!this.state.id) {
@@ -71,7 +71,6 @@ class Login extends Component {
     const isValid = this.checkValidity();
 
     if (isValid) {
-      //console.log(this.props.users[this.state.id].avatarURL);
       const usersId = Object.keys(this.props.users);
       console.log(usersId)
       const isFound = usersId.includes(this.state.id);
@@ -83,7 +82,6 @@ class Login extends Component {
     }
   };
 
-  /* Enable typing in text boxes */
   handleChange = (event) => {
     this.checkValidity();
     this.setState({
@@ -97,7 +95,6 @@ class Login extends Component {
     });
   };
 
-  /* Render sign up form */
   render() {
     
     const { classes } = this.props;
@@ -110,8 +107,8 @@ class Login extends Component {
     }
 
     const form = (
-      <div className={classes.paper}>
-        <Typography variant='h2' marked='center' align='center'>
+      <Paper elevation={3} className={classes.paper}>
+        <Typography variant='h4' marked='center' align='center'>
           Would You Rather
         </Typography>
         <form className={classes.form} onSubmit={this.submitHandler} noValidate>
@@ -140,35 +137,18 @@ class Login extends Component {
             variant='contained'
             color='primary'
             className={classes.submit}
-            //   onClick={() =>
-            //     this.props.loginAction(this.state.email, this.state.password)
-            //   }
-
             onClick={this.submitHandler}
           >
             Submit
           </Button>
         </form>
-        {/* <Button onClick={this.switchAuthModeHandler}>
-          SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-        </Button> */}
-      </div>
+      </Paper>
     );
-
-    // if (this.props.error) {
-    //   errorMessage = <p>{this.props.error.message}</p>;
-    // }
-
-    // console.log(this.props.authState.loggedIn)
-    // if (this.props.authState.loggedIn) {
-    //     return ( <Dashboard/>)
-    //   }
 
     return (
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         {form}
-        {/* // {console.log(`This is from store:store ${store.getState().authState.loggedIn}`)} */}
       </Container>
     );
   }

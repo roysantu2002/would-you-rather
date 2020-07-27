@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { addPollAction } from "../actions/shared";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-
+import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -23,7 +23,7 @@ const useStyles = (theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%",
+    width: "80%",
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -118,8 +118,8 @@ class Addpoll extends Component {
     return (
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
-        <div className={classes.paper}>
-          <Typography variant='h2' marked='center' align='center'>
+        <Paper elevation={3} className={classes.paper}>
+          <Typography variant='h4' marked='center' align='center'>
             Would You Rather
           </Typography>
           <form
@@ -145,7 +145,7 @@ class Addpoll extends Component {
               <div style={{ fontSize: 12, color: "red" }}>
                 {this.state.oneError}
               </div>
-            </Grid>
+            </Grid> <br/>
             <Grid item xs={12}>
               <TextField
                 variant='outlined'
@@ -173,7 +173,7 @@ class Addpoll extends Component {
               Submit
             </Button>
           </form>
-        </div>
+       </Paper>
       </Container>
     );
   }
