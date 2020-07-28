@@ -1,35 +1,35 @@
-import React, { Component} from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Avatar from "@material-ui/core/Avatar";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import { setAuthedUser } from "../actions/authedUser";
+import React, { Component} from "react"
+import { connect } from "react-redux"
+import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
+import { withStyles } from "@material-ui/core/styles"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import Avatar from "@material-ui/core/Avatar"
+import useScrollTrigger from "@material-ui/core/useScrollTrigger"
+import Box from "@material-ui/core/Box"
+import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import { setAuthedUser } from "../actions/authedUser"
 
 function ElevationScroll(props) {
-  const { children } = props;
+  const { children } = props
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
-  });
+  })
 
   return React.cloneElement(children, {
     elevation: trigger ? 4 : 0,
-  });
+  })
 } //end of header elevator
 
 function TabPanel() {
-  const { children, value, index, ...other } = this.props;
+  const { children, value, index, ...other } = this.props
 
   return (
     <div
@@ -45,20 +45,13 @@ function TabPanel() {
         </Box>
       )}
     </div>
-  );
+  )
 }
 
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `scrollable-force-tab-${index}`,
-    "aria-controls": `scrollable-force-tabpanel-${index}`,
-  };
 }
 
 const useStyles = (theme) => ({
@@ -95,7 +88,7 @@ const useStyles = (theme) => ({
     marginRight: "50px",
     marginLeft: "50px",
   },
-});
+})
 
 class Dashboard extends Component {
   state = {
@@ -104,34 +97,34 @@ class Dashboard extends Component {
     idError: "",
     value: 0,
     avatarURL: "",
-  };
+  }
 
   componentDidMount() {
-    let avatarURL = "";
+    let avatarURL = ""
     try {
-      avatarURL = this.props.users[this.props.authedUser].avatarURL;
+      avatarURL = this.props.users[this.props.authedUser].avatarURL
     } catch {
-      avatarURL = "hello";
+      avatarURL = "hello"
     }
     if (avatarURL === null) {
-      avatarURL = "hello";
+      avatarURL = "hello"
     }
-    this.setState({ avatarURL: avatarURL });
+    this.setState({ avatarURL: avatarURL })
   }
   //handle Logout
   handleLogout = () => {
-    const { setAuthedUser} = this.props;
-    setAuthedUser(null);
+    const { setAuthedUser} = this.props
+    setAuthedUser(null)
 
-  };
+  }
 
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
     const handleChange = (event, newValue) => {
-      this.setState({ value: newValue });
+      this.setState({ value: newValue })
 
-      console.log(newValue);
-    };
+      console.log(newValue)
+    }
 
     return (
       <React.Fragment>
@@ -181,7 +174,7 @@ class Dashboard extends Component {
           </AppBar>
         </ElevationScroll>
       </React.Fragment>
-    );
+    )
   }
 }
 
@@ -189,16 +182,16 @@ function mapStateToProps({ authedUser, users }) {
   return {
     authedUser,
     users,
-  };
+  }
 }
 function mapDispatchToProps(dispatch) {
   return {
     setAuthedUser: (id) => {
-      dispatch(setAuthedUser(id));
+      dispatch(setAuthedUser(id))
     },
-  };
+  }
 }
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles, { withTheme: true })(Dashboard));
+)(withStyles(useStyles, { withTheme: true })(Dashboard))

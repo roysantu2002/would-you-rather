@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { addPollAction } from "../actions/shared";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Typography from "./UI/Typography";
-import Button from "@material-ui/core/Button";
+import React, { Component } from "react"
+import { addPollAction } from "../actions/shared"
+import { connect } from "react-redux"
+import { Redirect } from "react-router-dom"
+import Paper from "@material-ui/core/Paper"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import { withStyles } from "@material-ui/core/styles"
+import Container from "@material-ui/core/Container"
+import Grid from "@material-ui/core/Grid"
+import TextField from "@material-ui/core/TextField"
+import Typography from "./UI/Typography"
+import Button from "@material-ui/core/Button"
 
 const useStyles = (theme) => ({
   paper: {
@@ -18,22 +18,14 @@ const useStyles = (theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
     width: "80%",
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-  },
-  large: {
-    width: theme.spacing(15),
-    height: theme.spacing(15),
-  },
-});
+  }
+})
 
 class Addpoll extends Component {
   state = {
@@ -43,64 +35,64 @@ class Addpoll extends Component {
     oneError: "",
     twoError: "",
     toHome: false,
-  };
+  }
 
   checkValidity = () => {
-    let isValid = true;
-    let oneError = "";
-    let twoError = "";
+    let isValid = true
+    let oneError = ""
+    let twoError = ""
 
     if (!this.state.optionOne) {
-      oneError = "Option one cannot be empty";
-      isValid = false;
+      oneError = "Option one cannot be empty"
+      isValid = false
     } else if (this.state.optionOne) {
       if (this.state.optionOne.length < 6) {
-        oneError = "Option one min of 6 characters";
+        oneError = "Option one min of 6 characters"
       }
     }
 
     if (!this.state.optionTwo) {
-      twoError = "Option two cannot be empty";
+      twoError = "Option two cannot be empty"
     } else if (this.state.optionTwo) {
       if (this.state.optionTwo.length < 6) {
-        twoError = "Option two min of 6 characters";
+        twoError = "Option two min of 6 characters"
       }
     }
 
     if (oneError) {
-      this.setState({ oneError });
-      isValid = false;
+      this.setState({ oneError })
+      isValid = false
     } else {
-      this.setState({ oneError: "" });
-      isValid = true;
+      this.setState({ oneError: "" })
+      isValid = true
     }
 
     if (twoError) {
-      this.setState({ twoError });
-      isValid = false;
+      this.setState({ twoError })
+      isValid = false
     } else {
-      this.setState({ twoError: "" });
-      isValid = true;
+      this.setState({ twoError: "" })
+      isValid = true
     }
 
-    return isValid;
-  };
+    return isValid
+  }
 
   /* Enable typing in text boxes */
   handleChange = (event) => {
-    this.checkValidity();
+    this.checkValidity()
     this.setState({
       [event.target.name]: event.target.value,
-    });
-  };
+    })
+  }
 
   submitHandler = (event) => {
-    event.preventDefault();
-    const isValid = this.checkValidity();
-    const { optionOne, optionTwo } = this.state;
-    console.log(isValid);
+    event.preventDefault()
+    const isValid = this.checkValidity()
+    const { optionOne, optionTwo } = this.state
+    console.log(isValid)
     if (isValid) {
-      this.props.addPoll(optionOne, optionTwo);
+      this.props.addPoll(optionOne, optionTwo)
       this.setState(() => ({
         toHome: true,
       }))
@@ -108,11 +100,11 @@ class Addpoll extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
     const { toHome } = this.state
 
     if (toHome === true) {
-      return <Redirect to='/' />;
+      return <Redirect to='/' />
     }
 
     return (
@@ -175,18 +167,18 @@ class Addpoll extends Component {
           </form>
        </Paper>
       </Container>
-    );
+    )
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addPoll: (optionOne, optionTwo) => {
-      dispatch(addPollAction(optionOne, optionTwo));
+      dispatch(addPollAction(optionOne, optionTwo))
     },
-  };
+  }
 }
 export default connect(
   null,
   mapDispatchToProps
-)(withStyles(useStyles, { withTheme: true })(Addpoll));
+)(withStyles(useStyles, { withTheme: true })(Addpoll))

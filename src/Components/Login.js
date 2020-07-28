@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { connect } from "react-redux";
-import Typography from "./UI/Typography";
-import { setAuthedUser } from "../actions/authedUser";
+import React, { Component } from "react"
+import Paper from "@material-ui/core/Paper"
+import Button from "@material-ui/core/Button"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import TextField from "@material-ui/core/TextField"
+import Grid from "@material-ui/core/Grid"
+import { withStyles } from "@material-ui/core/styles"
+import Container from "@material-ui/core/Container"
+import { connect } from "react-redux"
+import Typography from "./UI/Typography"
+import { setAuthedUser } from "../actions/authedUser"
 
 const useStyles = (theme) => ({
   paper: {
@@ -35,75 +35,75 @@ const useStyles = (theme) => ({
     width: theme.spacing(15),
     height: theme.spacing(15),
   },
-});
+})
 
 class Login extends Component {
   state = {
     users: [],
     id: "",
     idError: "",
-  };
+  }
 
   componentDidMount() {}
 
   checkValidity = () => {
-    let idError = "";
+    let idError = ""
 
     if (!this.state.id) {
-      idError = "id cannot be empty";
+      idError = "id cannot be empty"
     } else if (this.state.id) {
       if (this.state.id.length < 6) {
-        idError = "id min of 6 characters";
+        idError = "id min of 6 characters"
       }
     }
     if (idError) {
-      this.setState({ idError });
-      return false;
+      this.setState({ idError })
+      return false
     } else {
-      this.setState({ idError: "" });
+      this.setState({ idError: "" })
     }
 
-    return true;
-  };
+    return true
+  }
 
   submitHandler = (event) => {
-    event.preventDefault();
-    const isValid = this.checkValidity();
+    event.preventDefault()
+    const isValid = this.checkValidity()
 
     if (isValid) {
-      const usersId = Object.keys(this.props.users);
+      const usersId = Object.keys(this.props.users)
       console.log(usersId)
-      const isFound = usersId.includes(this.state.id);
+      const isFound = usersId.includes(this.state.id)
       if (isFound) {
-        this.props.setAuthedUser(this.state.id);
+        this.props.setAuthedUser(this.state.id)
       } else {
-        this.setState({ idError: "id not found!!" });
+        this.setState({ idError: "id not found!!" })
       }
     }
-  };
+  }
 
   handleChange = (event) => {
-    this.checkValidity();
+    this.checkValidity()
     this.setState({
       [event.target.name]: event.target.value,
-    });
-  };
+    })
+  }
 
   switchAuthModeHandler = () => {
     this.setState((prevState) => {
-      return { isSignup: !prevState.isSignup };
-    });
-  };
+      return { isSignup: !prevState.isSignup }
+    })
+  }
 
   render() {
     
-    const { classes } = this.props;
-    const formElementsArray = [];
+    const { classes } = this.props
+    const formElementsArray = []
     for (let key in this.state.controls) {
       formElementsArray.push({
         id: key,
         config: this.state.controls[key],
-      });
+      })
     }
 
     const form = (
@@ -143,31 +143,31 @@ class Login extends Component {
           </Button>
         </form>
       </Paper>
-    );
+    )
 
     return (
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         {form}
       </Container>
-    );
+    )
   }
 }
 
 function mapStateToProps({ users }) {
   return {
     users,
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     setAuthedUser: (id) => {
-      dispatch(setAuthedUser(id));
+      dispatch(setAuthedUser(id))
     },
-  };
+  }
 }
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles, { withTheme: true })(Login));
+)(withStyles(useStyles, { withTheme: true })(Login))

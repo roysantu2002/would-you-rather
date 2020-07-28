@@ -1,5 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import { green, grey, red } from "@material-ui/core/colors";
+import { green, red } from "@material-ui/core/colors";
 
 const darkRed = "#ff3422"
 const gold = "#835A00"

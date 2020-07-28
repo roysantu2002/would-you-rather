@@ -6,7 +6,6 @@ import { showLoading, hideLoading } from 'react-redux-loading'
 import { getInitialPolls } from '../utils/api'
 import { savePollAPI, savePollAnswerAPI } from '../utils/api'
 
-
 // const AUTHED_ID = 'tylermcginnis'
 
 export function handleInitialData (AUTHED_ID) {
