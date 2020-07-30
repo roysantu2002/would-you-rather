@@ -33,23 +33,6 @@ class Dashboard extends Component {
 
   render() {
     const { classes, answeredPolls, unansweredPolls, loadingBar } = this.props
-
-    // const answered = (
-    //   <section className={classes.root}>
-    //     <Container component="section">
-    //       <Typography
-    //         variant="h5"
-    //         marked="center"
-    //         align="center"
-    //         onClick={this.switchAuthModeHandler}
-    //       >
-    //         {/* <Button onClick={this.switchAuthModeHandler}> */}
-    //         Switch To : {this.state.isAnswered ? "Answered" : "Unanswered"}
-    //       </Typography>
-    //     </Container>
-    //   </section>
-    // )
-
     return (
       <section className={classes.root}>
         <Container component="section">

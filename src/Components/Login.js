@@ -2,8 +2,10 @@ import React, { Component } from "react"
 import Paper from "@material-ui/core/Paper"
 import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
-import TextField from "@material-ui/core/TextField"
-import Grid from "@material-ui/core/Grid"
+import FormControl from "@material-ui/core/FormControl"
+import InputLabel from "@material-ui/core/InputLabel"
+import Select from "@material-ui/core/Select"
+import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
 import { connect } from "react-redux"
@@ -27,34 +29,32 @@ const useStyles = (theme) => ({
     alignItems: "center",
   },
   submit: {
-    
     margin: theme.spacing(3, 0, 2),
-
   },
   large: {
     width: theme.spacing(15),
     height: theme.spacing(15),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 250,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 })
 
 class Login extends Component {
   state = {
-    users: [],
-    id: "",
+    userId: "",
     idError: "",
   }
-
-  componentDidMount() {}
 
   checkValidity = () => {
     let idError = ""
 
-    if (!this.state.id) {
+    if (!this.state.userId) {
       idError = "id cannot be empty"
-    } else if (this.state.id) {
-      if (this.state.id.length < 6) {
-        idError = "id min of 6 characters"
-      }
     }
     if (idError) {
       this.setState({ idError })
@@ -68,18 +68,14 @@ class Login extends Component {
 
   submitHandler = (event) => {
     event.preventDefault()
-    const isValid = this.checkValidity()
-
-    if (isValid) {
-      const usersId = Object.keys(this.props.users)
-      console.log(usersId)
-      const isFound = usersId.includes(this.state.id)
-      if (isFound) {
-        this.props.setAuthedUser(this.state.id)
-      } else {
-        this.setState({ idError: "id not found!!" })
-      }
+   const isValid = this.checkValidity()
+   if (isValid) {
+    if (this.state.userId) {
+      this.props.setAuthedUser(this.state.userId)
+    } else {
+      this.setState({ idError: "id not found!!" })
     }
+  }
   }
 
   handleChange = (event) => {
@@ -95,9 +91,12 @@ class Login extends Component {
     })
   }
 
+  onSelectUserId = (userId) => this.setState({ userId })
+
   render() {
-    
-    const { classes } = this.props
+    const { classes, users } = this.props
+    const usersId = Object.keys(users)
+
     const formElementsArray = []
     for (let key in this.state.controls) {
       formElementsArray.push({
@@ -108,34 +107,36 @@ class Login extends Component {
 
     const form = (
       <Paper elevation={3} className={classes.paper}>
-        <Typography variant='h4' marked='center' align='center'>
+        <Typography variant="h4" marked="center" align="center">
           Would You Rather
         </Typography>
         <form className={classes.form} onSubmit={this.submitHandler} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}></Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              variant='outlined'
-              required
-              fullWidth
-              id='id'
-              label='user id'
-              value={this.state.email}
-              name='id'
-              autoComplete='id'
-              onChange={this.handleChange}
-            />
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel  id="user-id">user</InputLabel>
+            
+              <Select
+                className={classes.selectEmpty}
+                displayEmpty
+                value={this.state.userId}
+                onChange={(e) => this.onSelectUserId(e.target.value)}
+              >
+                {usersId.map((id) => (
+                  <MenuItem value={id} key={id}>
+                    {id}
+                  </MenuItem>
+                ))}
+              </Select>
+           
+            </FormControl>
             <div style={{ fontSize: 12, color: "red" }}>
               {this.state.idError}
             </div>
-          </Grid>
+         
           <Button
-            id='sign-up-button'
+            id="sign-up-button"
             fullWidth
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.submit}
             onClick={this.submitHandler}
           >
@@ -146,7 +147,7 @@ class Login extends Component {
     )
 
     return (
-      <Container component='main' maxWidth='xs'>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         {form}
       </Container>
