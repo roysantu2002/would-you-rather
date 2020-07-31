@@ -18,7 +18,7 @@ const styles = (theme) => ({
 class Dashboard extends Component {
   state = {
     users: [],
-    isAnswered: true,
+    isAnswered: false,
   }
 
   componentDidMount() {

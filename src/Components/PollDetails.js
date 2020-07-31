@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button"
 import Avatar from "@material-ui/core/Avatar"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import Paper from "@material-ui/core/Paper"
-import Radio from '@material-ui/core/Radio'
+import Radio from "@material-ui/core/Radio"
 import RadioGroup from "@material-ui/core/RadioGroup"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
 import CheckIcon from "@material-ui/icons/Check"
@@ -13,14 +13,12 @@ import Container from "@material-ui/core/Container"
 import Divider from "@material-ui/core/Divider"
 import Typography from "@material-ui/core/Typography"
 import Grid from "@material-ui/core/Grid"
-
+import NoMatch from "./NoMatch"
 import { formatDate } from "../utils/helpers"
-
 import { connect } from "react-redux"
 import { handleSavePollAnswer } from "../actions/shared"
 
 const styles = (theme) => ({
-  
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -52,13 +50,13 @@ class PollDetails extends Component {
 
   submitAnswer = (e) => {
     e.preventDefault()
-   
+
     const { savePollAnswer } = this.props
     const answer = this.state.ans
 
     savePollAnswer(answer)
 
-    return <Redirect to='/' />
+    return <Redirect to="/" />
   }
 
   render() {
@@ -74,8 +72,8 @@ class PollDetails extends Component {
       isOneAnswered,
       isTwoAnswered,
     } = this.props
-    const optionOneVotes = poll.optionOne.votes.length
-    const optionTwoVotes = poll.optionTwo.votes.length
+    const optionOneVotes = poll ? poll.optionOne.votes.length : 0
+    const optionTwoVotes = poll ? poll.optionTwo.votes.length : 0
     const optionOnePercentage = (
       (optionOneVotes / (optionOneVotes + optionTwoVotes)) *
       100
@@ -106,19 +104,19 @@ class PollDetails extends Component {
             />
           </RadioGroup>
         </Grid>
-        
-          <Grid item xs={12}>
-            <Button
-              id="sign-up-button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={this.submitAnswer}
-            >
-              Submit
-            </Button> 
-            <Divider />
+
+        <Grid item xs={12}>
+          <Button
+            id="sign-up-button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={this.submitAnswer}
+          >
+            Submit
+          </Button>
+          <Divider />
         </Grid>
       </form>
     )
@@ -126,30 +124,41 @@ class PollDetails extends Component {
       <Paper elevation={3} className={classes.paper}>
         <Divider className={classes.divider} light />
         {form}
+        <Divider className={classes.divider} light />
+        <Avatar alt={`Avatar of ${author}`} src={authorAvatar} />
+        <Typography variant="subtitle1"> {timestamp}</Typography>
       </Paper>
     )
     const answeredCard = (
       <Paper elevation={3} className={classes.paper}>
-         <Grid item xs={12}>
+        <Grid item xs={12}>
           <Typography variant="subtitle1">
             <span className={isOneAnswered ? "answered" : ""}>{optionOne}</span>
             <br />
             {isOneAnswered ? <CheckIcon /> : null}
             <span className="vote-result">{`${optionOneVotes} vote(s) | ${optionOnePercentage}%`}</span>
           </Typography>
-          </Grid>
-          <Divider className={classes.divider} light />
+        </Grid>
+        <Divider className={classes.divider} light />
 
-          <Grid item xs={12}>
+        <Grid item xs={12}>
           <Typography variant="subtitle1">
             <span className={isTwoAnswered ? "answered" : ""}>{optionTwo}</span>
             <br />
             {isTwoAnswered ? <CheckIcon /> : null}
             <span className="vote-result">{`${optionTwoVotes} vote(s) | ${optionTwoPercentage}%`}</span>
           </Typography>
-         </Grid>
+        </Grid>
+        <Divider className={classes.divider} light />
+        <Avatar alt={`Avatar of ${author}`} src={authorAvatar} />
+        <Typography variant="subtitle1"> {timestamp}</Typography>
       </Paper>
     )
+
+    let showDisplay
+    if (poll==null) showDisplay = <NoMatch />
+    else if (answered) showDisplay = answeredCard
+    else showDisplay = unAnsweredCard
 
     return (
       <Container component="main" maxWidth="xs">
@@ -158,10 +167,7 @@ class PollDetails extends Component {
           Would You Rather
         </Typography>
         <Divider className={classes.divider} light />
-        {answered ? answeredCard : unAnsweredCard}
-        <Divider className={classes.divider} light />
-          <Avatar alt={`Avatar of ${author}`} src={authorAvatar} />
-          <Typography variant="subtitle1"> {timestamp}</Typography>
+        {showDisplay}  
       </Container>
     )
   }
@@ -169,14 +175,15 @@ class PollDetails extends Component {
 
 function mapStateToProps({ authedUser, polls, users }, props) {
   const { question_id } = props.match.params
-  const poll = polls[question_id]
-  const authorAvatar = users[poll.author].avatarURL
-  const author = users[poll.author].id
-  const timestamp = formatDate(poll.timestamp)
-  const optionOne = poll.optionOne.text
-  const optionTwo = poll.optionTwo.text
-  const isOneAnswered = poll.optionOne.votes.includes(authedUser)
-  const isTwoAnswered = poll.optionTwo.votes.includes(authedUser)
+  const inValid = null
+  const poll = question_id ? polls[question_id] : inValid
+  const authorAvatar = poll ? users[poll.author].avatarURL : inValid
+  const author = poll ? users[poll.author].id : inValid
+  const timestamp = poll ? formatDate(poll.timestamp) : inValid
+  const optionOne = poll ? poll.optionOne.text : inValid
+  const optionTwo = poll ? poll.optionTwo.text : inValid
+  const isOneAnswered = poll ?  poll.optionOne.votes.includes(authedUser) :inValid
+  const isTwoAnswered = poll ? poll.optionTwo.votes.includes(authedUser) : inValid
   const answered = isOneAnswered || isTwoAnswered
 
   return {
@@ -196,15 +203,16 @@ function mapStateToProps({ authedUser, polls, users }, props) {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps(dispatch, props) {
   const { question_id } = props.match.params
   return {
-      savePollAnswer : (answer) => {
-          dispatch(handleSavePollAnswer(question_id, answer))
-      }
+    savePollAnswer: (answer) => {
+      dispatch(handleSavePollAnswer(question_id, answer))
+    },
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles, { withTheme: true })(PollDetails)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(PollDetails))
