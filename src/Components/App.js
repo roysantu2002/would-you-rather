@@ -8,6 +8,7 @@ import { handleInitialData, handleInitialPolls } from "../actions/shared"
 import LoadingBar from "react-redux-loading"
 import Navbar from "./Navbar"
 import Login from "./Login"
+import './UI/Global.css'
 import Dashboard from "./Dashboard"
 import NoMatch from './NoMatch'
 import AddPoll from "./Addpoll"

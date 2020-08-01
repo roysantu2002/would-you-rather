@@ -26,7 +26,7 @@ const styles = (theme) => ({
     alignItems: "center",
   },
   divider: {
-    margin: `${theme.spacing.unit * 3}px 0`,
+    margin:  theme.spacing(2),
   },
   form: {
     width: "100%",

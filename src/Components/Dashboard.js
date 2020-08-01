@@ -9,9 +9,13 @@ import Grid from "@material-ui/core/Grid"
 
 const styles = (theme) => ({
   root: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(4),
+    marginTop: "10",
+    marginBottom: "10",
     backgroundImage: "url('/assets/bg-patt.svg')",
+  },
+  header:{
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   }
 })
 
@@ -36,24 +40,27 @@ class Dashboard extends Component {
     return (
       <section className={classes.root}>
         <Container component="section">
+          <div className={classes.header}>
           <Typography
             variant="h5"
             marked="center"
             align="center"
             onClick={this.switchAuthModeHandler}
           >
+           
             Switch To : {this.state.isAnswered ? "Unanswered" : "Answered"}
-          </Typography>
-
+          </Typography> <br/>
+          </div>
+      
           <Grid container className={classes.root} spacing={2}>
             {this.state.isAnswered
               ? answeredPolls.map((id) => (
-                  <Grid item xs={6}>
+                  <Grid item xs={6} key={id}>
                     <Answered id={id} />{" "}
                   </Grid>
                 ))
               : unansweredPolls.map((id) => (
-                  <Grid item xs={6}>
+                  <Grid item xs={6} key={id}>
                     <Answered id={id} />{" "}
                   </Grid>
                 ))}

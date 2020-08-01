@@ -19,15 +19,12 @@ const styles = (theme) => ({
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
   },
-  caption: {
-    maxWidth: "60%",
-  },
   content: {
     textAlign: "left",
-    padding: theme.spacing.unit * 3,
+    padding:  theme.spacing(3),
   },
   divider: {
-    margin: `${theme.spacing.unit * 3}px 0`,
+    margin:  theme.spacing(3),
   },
   cardLink: {
     textDecoration: 'none',

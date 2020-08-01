@@ -4,6 +4,8 @@ import Card from "@material-ui/core/Card"
 import CardMedia from "@material-ui/core/CardMedia"
 import CardContent from "@material-ui/core/CardContent"
 import Typography from "@material-ui/core/Typography"
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid"
 import { connect } from "react-redux"
 
@@ -11,6 +13,7 @@ const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
+    margnTop: "5%",
     justifyContent: "space-around",
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
@@ -34,7 +37,7 @@ const styles = (theme) => ({
   },
   content: {
     textAlign: "left",
-    padding: theme.spacing.unit * 3,
+    padding:  theme.spacing(2),
   }
 })
 
@@ -54,17 +57,21 @@ class LeadersCard extends React.Component {
     const { classes, users, dataSet } = this.props
 
     const leadersList = (
+      <React.Fragment>
+      <CssBaseline />
+      <Container fixed>
       <Grid container className={classes.root} spacing={2}>
         <Grid item xs={6}>
-          <Typography variant="h3" marked="center" align="center">
+      
+          <Typography variant="h2" marked="center" align="center">
             Know Who!!
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             {dataSet.map((user, index) => (
-              <Card className={classes.card}>
-                <CardMedia
+              <Card className={classes.card} key={index}>
+                <CardMedia 
                   className={classes.media}
                   image={users[user.uid].avatarURL}
                 />
@@ -91,6 +98,8 @@ class LeadersCard extends React.Component {
           </Grid>
         </Grid>
       </Grid>
+      </Container>
+      </React.Fragment>
     )
 
     return leadersList

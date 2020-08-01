@@ -13,7 +13,6 @@ export function handleInitialData (AUTHED_ID) {
         dispatch(showLoading())
         return getInitialData()
             .then(( {users} ) => {
-                // console.log(users)
                 dispatch(receiveUsers(users))
                 dispatch(setAuthedUser(AUTHED_ID))
                 dispatch(hideLoading())

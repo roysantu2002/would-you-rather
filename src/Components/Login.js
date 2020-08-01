@@ -31,10 +31,6 @@ const useStyles = (theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-  large: {
-    width: theme.spacing(15),
-    height: theme.spacing(15),
-  },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 250,
@@ -161,13 +157,17 @@ function mapStateToProps({ users }) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setAuthedUser: (id) => {
-      dispatch(setAuthedUser(id))
-    },
-  }
+const mapDispatchToProps = {
+  setAuthedUser
 }
+
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     setAuthedUser: (id) => {
+//       dispatch(setAuthedUser(id))
+//     },
+//   }
+// }
 export default connect(
   mapStateToProps,
   mapDispatchToProps

@@ -89,9 +89,10 @@ class Addpoll extends Component {
   submitHandler = (event) => {
     event.preventDefault()
     const isValid = this.checkValidity()
+   
     const { optionOne, optionTwo } = this.state
-    console.log(isValid)
-    if (isValid) {
+
+    if (isValid && optionOne !== optionTwo) {
       this.props.addPoll(optionOne, optionTwo)
       this.setState(() => ({
         toHome: true,

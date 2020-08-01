@@ -1,39 +1,38 @@
-import React, { Component} from "react"
-import { connect } from "react-redux"
-import { Link } from "react-router-dom"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import Tabs from "@material-ui/core/Tabs"
-import Tab from "@material-ui/core/Tab"
-import Avatar from "@material-ui/core/Avatar"
-import useScrollTrigger from "@material-ui/core/useScrollTrigger"
-import Box from "@material-ui/core/Box"
-import Typography from "@material-ui/core/Typography"
-import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
-import { setAuthedUser } from "../actions/authedUser"
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Avatar from "@material-ui/core/Avatar";
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import { setAuthedUser } from "../actions/authedUser";
 
 function ElevationScroll(props) {
-  const { children } = props
+  const { children } = props;
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
-  })
+  });
 
   return React.cloneElement(children, {
     elevation: trigger ? 4 : 0,
-  })
+  });
 } //end of header elevator
 
 function TabPanel() {
-  const { children, value, index, ...other } = this.props
+  const { children, value, index, ...other } = this.props;
 
   return (
     <div
-      role='tabpanel'
+      role="tabpanel"
       hidden={value !== index}
       id={`scrollable-force-tabpanel-${index}`}
       aria-labelledby={`scrollable-force-tab-${index}`}
@@ -45,50 +44,39 @@ function TabPanel() {
         </Box>
       )}
     </div>
-  )
+  );
 }
 
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
-}
+};
 
 const useStyles = (theme) => ({
-  toobarMargin: {
-    ...theme.mixins.toolbar,
-    marginBottom: "3em",
-    [theme.breakpoints.down("md")]: {
-      marginBottom: "1em",
-    },
-    [theme.breakpoints.down("xs")]: {
-      marginBottom: "1.25em",
-    },
-  },
 
   tabContainer: {
     marginLeft: "auto",
   },
-  tab: {
-    ...theme.typography.tab,
-    minWidth: 10,
-    marginLeft: "50px",
+
+  appbar: {
+    position: "relative",
+    zIndex: theme.zIndex.drawer + 1,
+    padding: 0,
   },
- home: {
-   align: 'left',
-   padding: 10,
-   marginRight: "200px",
-   color: "white",
-   "&:hover":{
-     backgroundColor: "transparent"
-   }
- },
+  home: {
+    padding: 10,
+    color: "white",
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+  },
 
   button: {
     marginRight: "50px",
     marginLeft: "50px",
   },
-})
+});
 
 class Dashboard extends Component {
   state = {
@@ -97,42 +85,46 @@ class Dashboard extends Component {
     idError: "",
     value: 0,
     avatarURL: "",
-  }
+  };
 
   componentDidMount() {
-    let avatarURL = ""
+    let avatarURL = "";
     try {
-      avatarURL = this.props.users[this.props.authedUser].avatarURL
+      avatarURL = this.props.users[this.props.authedUser].avatarURL;
     } catch {
-      avatarURL = "hello"
+      avatarURL = "hello";
     }
     if (avatarURL === null) {
-      avatarURL = "hello"
+      avatarURL = "hello";
     }
-    this.setState({ avatarURL: avatarURL })
+    this.setState({ avatarURL: avatarURL });
   }
-  //handle Logout
   handleLogout = () => {
-    const { setAuthedUser} = this.props
-    setAuthedUser(null)
-
-  }
+    const { setAuthedUser } = this.props;
+    setAuthedUser(null);
+  };
 
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
     const handleChange = (event, newValue) => {
-      this.setState({ value: newValue })
-
-      console.log(newValue)
-    }
+      this.setState({ value: newValue });
+    };
 
     return (
       <React.Fragment>
         <ElevationScroll>
-          <AppBar position='float' className={classes.appbar}>
-
-            <Button disableRipple className={classes.home} component={Link} to="/">
-            <Typography variant='h5' color="white">Welcome</Typography>
+          <AppBar className={classes.appbar}>
+            <Button
+              disableRipple
+              className={classes.home}
+              component={Link}
+              to="/"
+            >
+              <Typography variant="h5" color="inherit">
+                <Box textAlign="left" m={1}>
+                  Welcome
+                </Box>
+              </Typography>
             </Button>
             <Toolbar disableGutters>
               <Tabs
@@ -140,41 +132,31 @@ class Dashboard extends Component {
                 className={classes.tabContainer}
                 onChange={handleChange}
               >
-                <Tab label='Home' component={Link} to='/' />
-                <Tab label='Leader Board' component={Link} to='/leaderboard' />
-                <Tab label='Add Pool' component={Link} to='/addpoll' />
+                <Tab label="Home" component={Link} to="/" />
+                <Tab label="Leader Board" component={Link} to="/leaderboard" />
+                <Tab label="Add Pool" component={Link} to="/addpoll" />
               </Tabs>
 
               <Button
-                component={Link}
-                color='secondary'
-                variant='contained'
+                color="secondary"
+                variant="contained"
                 className={classes.button}
                 onClick={this.handleLogout}
               >
                 Logout
               </Button>
-         
-              <Grid spacing={2} > 
-                <Grid item align='center' marginRight="10px">
-                  <Avatar
-                    alt={this.props.authedUser}
-                    src={this.state.avatarURL}
-                  />
-                </Grid>
-                <Grid item marginRight="10px">
-                  <Typography>
-                    {`${this.props.authedUser}`}{" "}
-                  </Typography>
-                </Grid>
-                <Grid item></Grid>
-              </Grid>
-           
+              <div className="pic">
+                <Avatar
+                  alt={this.props.authedUser}
+                  src={this.state.avatarURL}
+                />
+                {this.props.authedUser}
+              </div>
             </Toolbar>
           </AppBar>
         </ElevationScroll>
       </React.Fragment>
-    )
+    );
   }
 }
 
@@ -182,16 +164,16 @@ function mapStateToProps({ authedUser, users }) {
   return {
     authedUser,
     users,
-  }
+  };
 }
 function mapDispatchToProps(dispatch) {
   return {
     setAuthedUser: (id) => {
-      dispatch(setAuthedUser(id))
+      dispatch(setAuthedUser(id));
     },
-  }
+  };
 }
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles, { withTheme: true })(Dashboard))
+)(withStyles(useStyles, { withTheme: true })(Dashboard));
